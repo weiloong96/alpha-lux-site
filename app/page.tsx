@@ -391,7 +391,7 @@ function HomePage({ setCurrentPage }: PageProps) {
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <ButtonLink primary href={company.whatsappLink} external>立即获取报价</ButtonLink>
-              <ButtonLink onClick={() => setCurrentPage("fleet")}>查看车队</ButtonLink>
+              <ButtonLink href="#fleet">查看车队</ButtonLink>
               <ButtonLink href={company.mapLink} external>查看地址</ButtonLink>
             </div>
             <div className="mt-6 flex flex-wrap gap-3 text-sm text-white/70">
