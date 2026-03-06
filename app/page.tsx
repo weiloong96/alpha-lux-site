@@ -154,7 +154,31 @@ const faqs = [
   },
 ];
 
-function SectionTitle({ eyebrow, title, desc }) {
+type SectionTitleProps = {
+  eyebrow: string;
+  title: string;
+  desc?: string;
+};
+
+type ImagePlaceholderProps = {
+  title: string;
+  subtitle: string;
+  tall?: boolean;
+};
+
+type ButtonLinkProps = {
+  children: React.ReactNode;
+  onClick?: () => void;
+  href?: string;
+  primary?: boolean;
+  external?: boolean;
+};
+
+type PageProps = {
+  setCurrentPage?: (page: string) => void;
+};
+
+function SectionTitle({ eyebrow, title, desc }: SectionTitleProps) {
   return (
     <div className="max-w-3xl">
       <div className="text-sm uppercase tracking-[0.35em] text-[#d4af67]">{eyebrow}</div>
@@ -164,7 +188,7 @@ function SectionTitle({ eyebrow, title, desc }) {
   );
 }
 
-function ImagePlaceholder({ title, subtitle, tall = false }) {
+function ImagePlaceholder({ title, subtitle, tall = false }: ImagePlaceholderProps) {
   return (
     <div className={`relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-gradient-to-br from-white/10 to-white/[0.03] ${tall ? "min-h-[340px]" : "min-h-[230px]"}`}>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,175,103,0.18),transparent_26%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.07),transparent_20%)]" />
@@ -181,7 +205,13 @@ function ImagePlaceholder({ title, subtitle, tall = false }) {
   );
 }
 
-function ButtonLink({ children, onClick, href, primary = false, external = false }) {
+function ButtonLink({
+  children,
+  onClick,
+  href,
+  primary = false,
+  external = false,
+}: ButtonLinkProps) {
   const className = primary
     ? "inline-flex items-center justify-center rounded-full bg-[#d4af67] px-6 py-3 text-sm font-semibold text-black transition hover:scale-[1.02]"
     : "inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10";
@@ -342,7 +372,7 @@ export default function AlphaLuxTransportationWebsite() {
   );
 }
 
-function HomePage({ setCurrentPage }) {
+function HomePage({ setCurrentPage }: PageProps) {
   return (
     <div>
       <section className="relative overflow-hidden">
@@ -482,7 +512,7 @@ function HomePage({ setCurrentPage }) {
   );
 }
 
-function ServicesPage({ setCurrentPage }) {
+function ServicesPage({ setCurrentPage }: PageProps) {
   return (
     <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
       <SectionTitle
@@ -602,7 +632,7 @@ function FleetPage({ setCurrentPage }) {
   );
 }
 
-function AboutPage({ setCurrentPage }) {
+function AboutPage({ setCurrentPage }: PageProps) {
   return (
     <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
       <div className="grid gap-10 lg:grid-cols-[1fr_0.95fr] lg:items-center">
@@ -743,7 +773,7 @@ function BookingPage() {
   );
 }
 
-function FaqPage({ setCurrentPage }) {
+function FaqPage({ setCurrentPage }: PageProps) {
   return (
     <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
       <SectionTitle
