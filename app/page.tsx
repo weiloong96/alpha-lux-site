@@ -278,7 +278,7 @@ export default function AlphaLuxTransportationWebsite() {
       case "about":
         return <AboutPage setCurrentPage={setCurrentPage} />;
       case "booking":
-        return <BookingPage setCurrentPage={setCurrentPage} />;
+        return <BookingPage />;
       case "faq":
         return <FaqPage setCurrentPage={setCurrentPage} />;
       default:
