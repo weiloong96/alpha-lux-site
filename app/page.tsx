@@ -679,13 +679,15 @@ function BookingPage({ lang }: { lang: Lang }) {
           <div className="rounded-[2rem] border border-white/10 bg-[#111216] p-7">
             <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">{t.booking.direct}</div>
             <div className="mt-5 space-y-4">
-              {[
-                ["WhatsApp", company.whatsapp, company.whatsappLink, true],
-                ["Phone", company.phone, company.phoneLink, false],
-                ["Email", company.email, company.emailLink, false],
-                ["Instagram", "@alphalux.tt", company.instagram, true],
-                ["Facebook", "Alpha Lux Tours and Transportation", company.facebook, true],
-              ].map(([title, text, href, external]) => (
+              {(
+  [
+    ["WhatsApp", company.whatsapp, company.whatsappLink, true],
+    ["Phone", company.phone, company.phoneLink, false],
+    ["Email", company.email, company.emailLink, false],
+    ["Instagram", "@alphalux.tt", company.instagram, true],
+    ["Facebook", "Alpha Lux Tours and Transportation", company.facebook, true],
+  ] as const
+).map(([title, text, href, external]) => (
                 <a
                   key={title}
                   href={href as string}
