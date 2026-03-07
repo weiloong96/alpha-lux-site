@@ -71,6 +71,15 @@ const images = {
   contact: "/contact.webp",
 };
 
+const pages: { key: PageKey; label: string }[] = [
+  { key: "home", label: "Home" },
+  { key: "services", label: "Services" },
+  { key: "fleet", label: "Fleet" },
+  { key: "about", label: "About" },
+  { key: "booking", label: "Book Now" },
+  { key: "faq", label: "FAQ" },
+];
+
 const content = {
   zh: {
     nav: {
