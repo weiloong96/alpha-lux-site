@@ -832,9 +832,12 @@ export default function Page() {
           <button className="md:hidden" onClick={() => setMobileOpen((value) => !value)}>{mobileOpen ? "✕" : "☰"}</button>
         </div>
 
-        {mobileOpen ? (
+                {mobileOpen ? (
           <div className="border-t border-white/10 bg-[#0d0d10] px-6 py-4 md:hidden">
-                       <div className="grid gap-3">
+            <div className="mb-4 flex gap-3">
+              <button onClick={() => setLang("zh")} className={`rounded-full px-3 py-2 text-xs ${lang === "zh" ? "bg-[#d4af67] text-black" : "bg-white/5 text-white/75"}`}>中文</button>
+              <button onClick={() => setLang("en")} className={`rounded-full px-3 py-2 text-xs ${lang === "en" ? "bg-[#d4af67] text-black" : "bg-white/5 text-white/75"}`}>EN</button>
+            </div>            <div className="grid gap-3">
               {pages.map((page) => (
                 <button
                   key={page.key}
