@@ -18,6 +18,10 @@ type SectionTitleProps = {
   desc?: string;
 };
 
+type HeroProps = {
+  goTo: (page: PageKey) => void;
+};
+
 const company = {
   name: "Alpha Lux Transportation",
   domain: "alphaluxtt.com",
@@ -32,6 +36,46 @@ const company = {
   mapLink: "https://maps.app.goo.gl/ajhHzNPLu2KRRKVn9",
   address:
     "3A-G-35, Straits Quay, Lorong Seri Tanjung Pinang, Seri Tanjung Pinang, 10470 Tanjung Tokong, Pulau Pinang",
+};
+
+/*
+  PHOTO FILE GUIDE
+  Put your photos inside /public and use these exact names.
+
+  /public/logo.png
+  /public/hero.webp
+  /public/home1.webp
+  /public/home2.webp
+  /public/luxury.webp
+  /public/luxury2.webp
+  /public/mpv.webp
+  /public/van.webp
+  /public/van2.webp
+  /public/bus.webp
+  /public/bus_interior.webp
+  /public/interior1.webp
+  /public/interior2.webp
+  /public/about.webp
+  /public/contact.webp
+
+  Later you only need to replace the file with the same name.
+*/
+const images = {
+  logo: "/logo.png",
+  hero: "/hero.webp",
+  home1: "/home1.webp",
+  home2: "/home2.webp",
+  luxury: "/luxury.webp",
+  luxury2: "/luxury2.webp",
+  mpv: "/mpv.webp",
+  van: "/van.webp",
+  van2: "/van2.webp",
+  bus: "/bus.webp",
+  busInterior: "/bus_interior.webp",
+  interior1: "/interior1.webp",
+  interior2: "/interior2.webp",
+  about: "/about.webp",
+  contact: "/contact.webp",
 };
 
 const pages: { key: PageKey; label: string }[] = [
@@ -71,8 +115,8 @@ const services = [
   },
   {
     title: "豪华车租借",
-    en: "Luxury Car Rental",
-    desc: "主打高端舒适车型，适合贵宾接待、重要客户与商务形象出行。",
+    en: "Luxury MPV Charter",
+    desc: "主打 Alphard 40Z 与高端舒适车型，适合贵宾接待与商务形象出行。",
   },
   {
     title: "跨州接送",
@@ -88,44 +132,44 @@ const services = [
 
 const fleet = [
   {
-    category: "Luxury MPV",
-    size: "豪华7座",
+    category: "Luxury Flagship",
+    size: "豪华 7 座",
     title: "Alphard 40Z / Vellfire",
-    desc: "主推 Alphard 40Z，适合 VIP 接待、高端商务、婚礼用车与机场接送。",
-    image: "/luxury.webp",
+    desc: "主推 Alphard 40Z，适合 VIP 接待、高端商务、婚礼用车与豪华机场接送。",
     note: "4–6 位乘客 · 2 个大型行李",
+    image: images.luxury,
   },
   {
-    category: "Premium MPV",
-    size: "7座",
+    category: "Family MPV",
+    size: "7 座",
     title: "Serena / Voxy / Nova",
-    desc: "适合家庭旅游、机场接送与舒适城际出行。",
-    image: "/mpv.webp",
+    desc: "适合家庭旅游、酒店接送与舒适城际出行。",
     note: "4–5 位乘客 · 1 大 1 中行李",
+    image: images.mpv,
   },
   {
     category: "Executive Sedan / SUV",
-    size: "5座",
+    size: "5 座",
     title: "City / Altis / X70 / X-Trail / CRV / Hilux",
     desc: "适合个人客户、小家庭与商务接待。",
-    image: "/home1.webp",
     note: "3 位乘客 · 2 个中型行李",
+    image: images.home1,
   },
   {
     category: "Group Van",
-    size: "10–18座",
+    size: "10–18 座",
     title: "Staria / Starex / G10 / Van",
-    desc: "适合旅游包车、公司活动、跨州接送与团队出行。",
-    image: "/van.webp",
+    desc: "适合旅游包车、公司活动、团队接送与跨州出行。",
     note: "中小型团队接送",
+    image: images.van,
   },
   {
     category: "Coach / Bus",
-    size: "24–44座",
+    size: "24–44 座",
     title: "Tour Coach / Bus",
     desc: "适合工厂工人接送、团体旅游、学校、企业班车与大型活动。",
-    image: "/bus.webp",
     note: "大型团队接送",
+    image: images.bus,
   },
 ];
 
@@ -148,7 +192,7 @@ const faqs = [
   },
   {
     q: "如何下单？",
-    a: "你可以直接填写网站下方的 Booking Form，提交后会自动跳转 WhatsApp，把资料发给我们确认。",
+    a: "客户填写网站下方的 Booking Form 后，点击按钮就会直接跳转到 WhatsApp，把完整资料发送给你确认。",
   },
 ];
 
@@ -199,6 +243,44 @@ function SectionTitle({ eyebrow, title, desc }: SectionTitleProps) {
   );
 }
 
+function PhotoCard({
+  src,
+  alt,
+  title,
+  subtitle,
+  tall = false,
+}: {
+  src: string;
+  alt: string;
+  title?: string;
+  subtitle?: string;
+  tall?: boolean;
+}) {
+  return (
+    <div
+      className={`group relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#111216] ${
+        tall ? "min-h-[340px]" : "min-h-[230px]"
+      }`}
+    >
+      <img
+        src={src}
+        alt={alt}
+        className={`h-full w-full object-cover transition duration-500 group-hover:scale-[1.03] ${
+          tall ? "min-h-[340px]" : "min-h-[230px]"
+        }`}
+      />
+      {(title || subtitle) && (
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-5">
+          {title ? <div className="text-lg font-semibold">{title}</div> : null}
+          {subtitle ? (
+            <div className="mt-2 text-sm leading-7 text-white/70">{subtitle}</div>
+          ) : null}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function FloatingWhatsApp() {
   return (
     <a
@@ -215,29 +297,7 @@ function FloatingWhatsApp() {
   );
 }
 
-function HeroImage() {
-  return (
-    <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#111216]">
-      <img
-        src="/hero.webp"
-        alt="Alpha Lux Transportation Alphard 40Z"
-        className="h-[420px] w-full object-cover"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 p-6">
-        <div className="inline-flex rounded-full border border-[#d4af67]/30 bg-black/30 px-4 py-2 text-xs uppercase tracking-[0.3em] text-[#d4af67] backdrop-blur">
-          Signature Fleet
-        </div>
-        <div className="mt-4 text-3xl font-semibold">Alphard 40Z</div>
-        <div className="mt-2 text-sm text-white/70">
-          Luxury chauffeur experience for airport transfer, corporate travel and VIP bookings
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function HomePage({ goTo }: { goTo: (page: PageKey) => void }) {
+function HomePage({ goTo }: HeroProps) {
   return (
     <div>
       <section className="relative overflow-hidden">
@@ -245,28 +305,30 @@ function HomePage({ goTo }: { goTo: (page: PageKey) => void }) {
         <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:px-10 lg:py-24">
           <div>
             <div className="inline-flex rounded-full border border-[#d4af67]/25 bg-[#d4af67]/10 px-4 py-2 text-xs uppercase tracking-[0.3em] text-[#d4af67]">
-              Premium Chauffeur & Charter Service
+              Penang & Malaysia Luxury Chauffeur
             </div>
 
             <h1 className="mt-6 max-w-5xl text-4xl font-semibold leading-tight sm:text-5xl lg:text-7xl">
-              Alpha Lux Transportation
-              <span className="mt-3 block text-white/70">
-                高端机场接送、商务出行与旅游包车服务
+              Luxury Chauffeur Experience
+              <span className="mt-3 block text-white">
+                for Airport, Corporate & VIP Travel
+              </span>
+              <span className="mt-4 block text-xl font-normal leading-9 text-white/65 sm:text-2xl">
+                Alpha Lux Transportation
               </span>
             </h1>
 
             <p className="mt-6 max-w-2xl text-base leading-8 text-white/68 sm:text-lg">
-              提供机场接送、商务接待、旅游包车、点对点接送、婚礼用车、豪华车租借、跨州接送与长期接驳等一站式地面交通服务，车队覆盖
-              5 座到 44 座，适合个人、家庭、企业客户与大型团队。
+              专注高端机场接送、商务接待、旅游包车、点对点接送与跨州出行。主推 Alphard 40Z，车队覆盖 5 座到 44 座，为个人客户、家庭旅客、企业团队与贵宾行程提供更舒适、更体面的出行体验。
             </p>
 
             <div className="mt-8 flex flex-wrap gap-4">
               <Button primary onClick={() => goTo("booking")}>
-                立即下单
+                Get Quote via WhatsApp
               </Button>
-              <Button onClick={() => goTo("fleet")}>查看车队</Button>
+              <Button onClick={() => goTo("fleet")}>View Luxury Fleet</Button>
               <Button href={company.mapLink} external>
-                查看地址
+                View Our Location
               </Button>
             </div>
 
@@ -291,17 +353,15 @@ function HomePage({ goTo }: { goTo: (page: PageKey) => void }) {
 
             <div className="mt-10 grid gap-4 sm:grid-cols-3">
               {[
-                ["5–44座", "车型灵活配置"],
-                ["商务级体验", "准时、舒适、专业"],
-                ["全马服务", "机场 / 旅游 / 跨州"],
+                ["Alphard 40Z", "VIP flagship vehicle"],
+                ["5–44 Seats", "Private to group travel"],
+                ["Malaysia Wide", "Airport · Tour · Interstate"],
               ].map(([title, text]) => (
                 <div
                   key={title}
                   className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5"
                 >
-                  <div className="text-2xl font-semibold text-[#d4af67]">
-                    {title}
-                  </div>
+                  <div className="text-2xl font-semibold text-[#d4af67]">{title}</div>
                   <div className="mt-2 text-sm text-white/62">{text}</div>
                 </div>
               ))}
@@ -309,17 +369,25 @@ function HomePage({ goTo }: { goTo: (page: PageKey) => void }) {
           </div>
 
           <div className="space-y-5">
-            <HeroImage />
+            <PhotoCard
+              src={images.hero}
+              alt="Alpha Lux Alphard hero"
+              title="Alphard 40Z"
+              subtitle="Luxury airport transfer, executive chauffeur service and VIP private charter across Penang and Malaysia."
+              tall
+            />
             <div className="grid gap-5 sm:grid-cols-2">
-              <img
-                src="/home1.webp"
-                alt="Airport transfer"
-                className="h-[220px] w-full rounded-[1.5rem] border border-white/10 object-cover"
+              <PhotoCard
+                src={images.home1}
+                alt="Airport transfer service"
+                title="Airport Transfer"
+                subtitle="Replace this with your best airport or hotel arrival photo."
               />
-              <img
-                src="/home2.webp"
-                alt="Corporate transfer"
-                className="h-[220px] w-full rounded-[1.5rem] border border-white/10 object-cover"
+              <PhotoCard
+                src={images.home2}
+                alt="Corporate transfer service"
+                title="Corporate Travel"
+                subtitle="Replace this with your best business or hotel entrance photo."
               />
             </div>
           </div>
@@ -328,9 +396,9 @@ function HomePage({ goTo }: { goTo: (page: PageKey) => void }) {
 
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <SectionTitle
-          eyebrow="Our Services"
-          title="核心服务一目了然"
-          desc="网站首页把客户最常找的服务直接展示出来，让客户一进来就知道你们能做什么。"
+          eyebrow="Signature Services"
+          title="专为高端接送、商务与旅游出行而设"
+          desc="把客户最常找的服务直接放在首页，让访客一进入网站就知道你们主打什么、适合什么场景。"
         />
         <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {services.map((item) => (
@@ -338,34 +406,27 @@ function HomePage({ goTo }: { goTo: (page: PageKey) => void }) {
               key={item.title}
               className="rounded-[1.75rem] border border-white/10 bg-white/5 p-6"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#d4af67]/25 bg-[#d4af67]/10 text-[#d4af67]">
-                ●
-              </div>
-              <div className="mt-5 text-xs uppercase tracking-[0.25em] text-[#d4af67]">
+              <div className="text-xs uppercase tracking-[0.25em] text-[#d4af67]">
                 {item.en}
               </div>
               <h3 className="mt-3 text-xl font-semibold">{item.title}</h3>
-              <p className="mt-3 text-sm leading-7 text-white/62">
-                {item.desc}
-              </p>
+              <p className="mt-3 text-sm leading-7 text-white/62">{item.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
       <section className="bg-white/[0.03]">
-        <div className="mx-auto grid max-w-7xl gap-10 px-6 py-20 lg:grid-cols-[0.9fr_1.1fr] lg:px-10">
+        <div className="mx-auto grid max-w-7xl gap-10 px-6 py-20 lg:grid-cols-[0.88fr_1.12fr] lg:px-10">
           <div>
             <SectionTitle
               eyebrow="Fleet Preview"
-              title="从5座到44座，满足不同场景"
-              desc="家庭出游、企业接待、团队活动、跨州出行，都能根据人数和需求灵活安排车型。"
+              title="从豪华 Alphard 到团体巴士，一站式安排"
+              desc="家庭旅客、商务客户、酒店接送、公司团队和大型活动，都能根据人数与场景安排合适车型。"
             />
             <div className="mt-8 flex gap-4">
-              <Button primary onClick={() => goTo("fleet")}>
-                进入 Fleet 页面
-              </Button>
-              <Button onClick={() => goTo("booking")}>立即询价</Button>
+              <Button primary onClick={() => goTo("fleet")}>View Full Fleet</Button>
+              <Button onClick={() => goTo("booking")}>Get Instant Quote</Button>
             </div>
           </div>
 
@@ -386,13 +447,29 @@ function HomePage({ goTo }: { goTo: (page: PageKey) => void }) {
                   </div>
                   <div className="mt-2 text-2xl font-semibold">{item.size}</div>
                   <div className="mt-2 text-lg text-white/90">{item.title}</div>
-                  <p className="mt-3 text-sm leading-7 text-white/62">
-                    {item.desc}
-                  </p>
+                  <p className="mt-3 text-sm leading-7 text-white/62">{item.desc}</p>
                   <div className="mt-3 text-sm text-[#d4af67]">{item.note}</div>
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
+        <div className="rounded-[2rem] border border-[#d4af67]/20 bg-gradient-to-r from-[#d4af67]/12 to-white/[0.03] p-8 lg:p-10">
+          <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div>
+              <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">Book Faster</div>
+              <h3 className="mt-3 text-3xl font-semibold">客户可以直接下单，不只是看网站</h3>
+              <p className="mt-4 max-w-3xl text-base leading-8 text-white/72">
+                这版网站已经把品牌展示、车队说明、联系方式和直接 WhatsApp 下单整合在一起，更适合真正接订单使用。
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Button primary onClick={() => goTo("booking")}>Book Now</Button>
+              <Button href={company.whatsappLink} external>WhatsApp Direct</Button>
+            </div>
           </div>
         </div>
       </section>
@@ -406,7 +483,7 @@ function ServicesPage() {
       <SectionTitle
         eyebrow="Services"
         title="服务页面"
-        desc="适合详细介绍每一种包车服务，帮助客户快速判断是否符合他们的出行需求。"
+        desc="这个页面适合详细介绍每一种包车服务，帮助客户快速判断是否符合他们的出行需求。"
       />
       <div className="mt-10 grid gap-6 lg:grid-cols-2">
         {services.map((item) => (
@@ -414,13 +491,41 @@ function ServicesPage() {
             key={item.title}
             className="rounded-[2rem] border border-white/10 bg-white/5 p-7"
           >
-            <div className="text-xs uppercase tracking-[0.24em] text-[#d4af67]">
-              {item.en}
-            </div>
+            <div className="text-xs uppercase tracking-[0.24em] text-[#d4af67]">{item.en}</div>
             <h3 className="mt-2 text-2xl font-semibold">{item.title}</h3>
             <p className="mt-3 text-sm leading-8 text-white/65">{item.desc}</p>
           </div>
         ))}
+      </div>
+
+      <div className="mt-12 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+        <PhotoCard
+          src={images.contact}
+          alt="Service banner"
+          title="Service Gallery"
+          subtitle="Replace this with airport, hotel entrance, customer pickup or tour service photo."
+          tall
+        />
+        <div className="rounded-[2rem] border border-white/10 bg-[#111216] p-7">
+          <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">Best For</div>
+          <div className="mt-4 grid gap-4">
+            {[
+              ["家庭与游客", "旅游包车、酒店接送、景点行程。"],
+              ["企业客户", "会议、展会、商务贵宾接待。"],
+              ["机场旅客", "准时接送、行李空间与舒适出行。"],
+            ].map(([title, text]) => (
+              <div key={title} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                <div className="font-medium">{title}</div>
+                <p className="mt-2 text-sm leading-7 text-white/62">{text}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6">
+            <Button primary href={company.whatsappLink} external>
+              咨询服务方案
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -434,24 +539,14 @@ function FleetPage() {
         title="车型页面"
         desc="车型页非常重要，因为客户通常会先看你们有哪些车、适合多少人、适合什么场景。"
       />
-
       <div className="mt-10 grid gap-6 lg:grid-cols-2">
         {fleet.map((item) => (
-          <div
-            key={item.title}
-            className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/5"
-          >
-            <img
-              src={item.image}
-              alt={item.title}
-              className="h-[260px] w-full object-cover"
-            />
+          <div key={item.title} className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/5">
+            <img src={item.image} alt={item.title} className="h-[260px] w-full object-cover" />
             <div className="p-7">
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <div className="text-xs uppercase tracking-[0.25em] text-[#d4af67]">
-                    {item.category}
-                  </div>
+                  <div className="text-xs uppercase tracking-[0.25em] text-[#d4af67]">{item.category}</div>
                   <h3 className="mt-3 text-2xl font-semibold">{item.title}</h3>
                 </div>
                 <div className="rounded-full border border-[#d4af67]/25 bg-[#d4af67]/10 px-4 py-2 text-sm font-medium text-[#d4af67]">
@@ -466,21 +561,9 @@ function FleetPage() {
       </div>
 
       <div className="mt-12 grid gap-5 md:grid-cols-3">
-        <img
-          src="/luxury2.webp"
-          alt="Luxury interior"
-          className="h-[230px] w-full rounded-[1.5rem] border border-white/10 object-cover"
-        />
-        <img
-          src="/interior1.webp"
-          alt="Interior 1"
-          className="h-[230px] w-full rounded-[1.5rem] border border-white/10 object-cover"
-        />
-        <img
-          src="/bus_interior.webp"
-          alt="Bus interior"
-          className="h-[230px] w-full rounded-[1.5rem] border border-white/10 object-cover"
-        />
+        <PhotoCard src={images.luxury2} alt="Luxury interior" title="Luxury Interior" subtitle="Replace with your best VIP seat photo." />
+        <PhotoCard src={images.interior1} alt="Interior 1" title="Interior Detail" subtitle="Replace with premium cabin detail photo." />
+        <PhotoCard src={images.busInterior} alt="Bus interior" title="Coach Interior" subtitle="Replace with your best bus cabin photo." />
       </div>
     </div>
   );
@@ -494,40 +577,33 @@ function AboutPage() {
           <SectionTitle
             eyebrow="About Us"
             title="关于我们"
-            desc="这一页用来建立信任感，告诉客户为什么选择 Alpha Lux Transportation。"
+            desc="这一页建议用来建立信任感，告诉客户为什么选择 Alpha Lux Transportation。"
           />
-
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
             {[
-              { title: "专业可靠", text: "注重品牌形象、行程安排与客户体验。" },
-              { title: "准时服务", text: "机场接送与商务行程更需要时间管理。" },
-              { title: "高端体验", text: "舒适车型、礼貌服务与商务级接待感。" },
-              { title: "灵活配车", text: "从个人到大型团队都能快速安排。" },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5"
-              >
-                <div className="text-lg font-semibold">{item.title}</div>
-                <p className="mt-2 text-sm leading-7 text-white/63">
-                  {item.text}
-                </p>
+              ["专业可靠", "注重品牌形象、行程安排与客户体验。"],
+              ["准时服务", "机场接送与商务行程更需要时间管理。"],
+              ["高端体验", "舒适车型、礼貌服务与商务级接待感。"],
+              ["灵活配车", "从个人到大型团队都能快速安排。"],
+            ].map(([title, text]) => (
+              <div key={title} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
+                <div className="text-lg font-semibold">{title}</div>
+                <p className="mt-2 text-sm leading-7 text-white/63">{text}</p>
               </div>
             ))}
           </div>
         </div>
-
-        <img
-          src="/luxury.webp"
-          alt="Alpha Lux About"
-          className="h-[520px] w-full rounded-[2rem] border border-white/10 object-cover"
+        <PhotoCard
+          src={images.about}
+          alt="About Alpha Lux"
+          title="Brand & Trust"
+          subtitle="Replace with your best brand image, driver photo, vehicle lineup or premium entrance scene."
+          tall
         />
       </div>
 
       <div className="mt-12 rounded-[2rem] border border-white/10 bg-[#111216] p-8">
-        <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">
-          Company Profile
-        </div>
+        <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">Company Profile</div>
         <p className="mt-4 max-w-4xl text-base leading-8 text-white/72">
           Alpha Lux Transportation 自 2023 年开始运营，致力于为客户提供高端、舒适、可靠的地面交通服务。我们专注于机场接送、企业商务出行、私人旅游包车、点对点接送、婚礼用车、豪华车租借、跨州接送，以及公司长期接送与工厂工人巴士服务。无论是个人客户、家庭旅客、企业团队还是大型团体，我们都以专业态度、灵活配车和细致安排，为每一段旅程带来更安心、更体面的出行体验。
         </p>
@@ -569,7 +645,7 @@ function BookingPage() {
       <SectionTitle
         eyebrow="Book Now"
         title="直接下单 / 立即询价"
-        desc="客户填写资料后，点击按钮就会直接跳转到 WhatsApp，把下单资料发给你。"
+        desc="客户填写资料后，点击按钮就会直接跳转到 WhatsApp，把完整订单资料发给你。"
       />
 
       <div className="mt-10 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
@@ -643,9 +719,7 @@ function BookingPage() {
           </div>
 
           <div className="mt-5">
-            <div className="mb-2 text-sm text-white/75">
-              小时 / 行程类型 Hours / Trip Type
-            </div>
+            <div className="mb-2 text-sm text-white/75">小时 / 行程类型 Hours / Trip Type</div>
             <input
               value={hours}
               onChange={(e) => setHours(e.target.value)}
@@ -665,18 +739,16 @@ function BookingPage() {
           </div>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <Button primary href={submitLink} external>
+            <ButtonLink primary href={submitLink} external>
               WhatsApp 立即下单
-            </Button>
-            <Button href={company.phoneLink}>直接致电</Button>
+            </ButtonLink>
+            <ButtonLink href={company.phoneLink}>直接致电</ButtonLink>
           </div>
         </div>
 
         <div className="space-y-6">
           <div className="rounded-[2rem] border border-white/10 bg-[#111216] p-7">
-            <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">
-              Direct Contact
-            </div>
+            <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">Direct Contact</div>
             <div className="mt-5 space-y-4">
               {[
                 {
@@ -729,16 +801,12 @@ function BookingPage() {
 
           <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#111216]">
             <div className="border-b border-white/10 p-7">
-              <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">
-                Location
-              </div>
-              <div className="mt-3 text-sm leading-7 text-white/72">
-                {company.address}
-              </div>
+              <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">Location</div>
+              <div className="mt-3 text-sm leading-7 text-white/72">{company.address}</div>
               <div className="mt-4">
-                <Button href={company.mapLink} external>
+                <ButtonLink href={company.mapLink} external>
                   Open in Google Maps
-                </Button>
+                </ButtonLink>
               </div>
             </div>
 
@@ -778,170 +846,14 @@ function FaqPage() {
       </div>
 
       <div className="mt-12 rounded-[2rem] border border-white/10 bg-[#111216] p-8">
-        <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">
-          Next Step
-        </div>
+        <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">Next Step</div>
         <h3 className="mt-3 text-2xl font-semibold">准备直接联系我下单</h3>
         <div className="mt-6">
-          <Button primary href={company.whatsappLink} external>
+          <ButtonLink primary href={company.whatsappLink} external>
             WhatsApp 联系 Alpha Lux
-          </Button>
+          </ButtonLink>
         </div>
       </div>
-    </div>
-  );
-}
-
-export default function Page() {
-  const [currentPage, setCurrentPage] = useState<PageKey>("home");
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  useEffect(() => {
-    const hash = window.location.hash.replace("#", "") as PageKey;
-    if (pages.some((page) => page.key === hash)) {
-      setCurrentPage(hash);
-    }
-  }, []);
-
-  useEffect(() => {
-    window.location.hash = currentPage;
-    setMobileOpen(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [currentPage]);
-
-  const currentLabel = useMemo(
-    () => pages.find((page) => page.key === currentPage)?.label || "Home",
-    [currentPage]
-  );
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case "services":
-        return <ServicesPage />;
-      case "fleet":
-        return <FleetPage />;
-      case "about":
-        return <AboutPage />;
-      case "booking":
-        return <BookingPage />;
-      case "faq":
-        return <FaqPage />;
-      default:
-        return <HomePage goTo={setCurrentPage} />;
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-[#0b0b0d] text-white">
-      <FloatingWhatsApp />
-
-      <div className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
-          <button
-            onClick={() => setCurrentPage("home")}
-            className="flex items-center gap-3 text-left"
-          >
-            <img
-              src="/logo.png"
-              alt="Alpha Lux logo"
-              className="h-12 w-12 rounded-xl border border-white/10 object-cover"
-            />
-            <div>
-              <div className="text-lg font-semibold tracking-[0.28em] text-[#d4af67]">
-                ALPHA LUX
-              </div>
-              <div className="text-[11px] uppercase tracking-[0.35em] text-white/55">
-                Transportation
-              </div>
-            </div>
-          </button>
-
-          <div className="hidden items-center gap-7 md:flex">
-            {pages.map((page) => (
-              <button
-                key={page.key}
-                onClick={() => setCurrentPage(page.key)}
-                className={`text-sm transition ${
-                  currentPage === page.key
-                    ? "text-[#d4af67]"
-                    : "text-white/70 hover:text-white"
-                }`}
-              >
-                {page.label}
-              </button>
-            ))}
-          </div>
-
-          <div className="hidden md:block">
-            <Button primary onClick={() => setCurrentPage("booking")}>
-              立即下单
-            </Button>
-          </div>
-
-          <button
-            className="md:hidden"
-            onClick={() => setMobileOpen((value) => !value)}
-          >
-            {mobileOpen ? "✕" : "☰"}
-          </button>
-        </div>
-
-        {mobileOpen ? (
-          <div className="border-t border-white/10 bg-[#0d0d10] px-6 py-4 md:hidden">
-            <div className="grid gap-3">
-              {pages.map((page) => (
-                <button
-                  key={page.key}
-                  onClick={() => setCurrentPage(page.key)}
-                  className={`rounded-2xl px-4 py-3 text-left text-sm ${
-                    currentPage === page.key
-                      ? "bg-[#d4af67]/12 text-[#d4af67]"
-                      : "bg-white/5 text-white/75"
-                  }`}
-                >
-                  {page.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        ) : null}
-      </div>
-
-      <div className="h-[76px]" />
-
-      <main>{renderPage()}</main>
-
-      <footer className="border-t border-white/10 bg-[#09090b]">
-        <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
-          <div className="grid gap-8 lg:grid-cols-[1fr_auto_auto] lg:items-center">
-            <div>
-              <div className="flex items-center gap-3 text-base font-semibold tracking-[0.22em] text-[#d4af67]">
-                <img
-                  src="/logo.png"
-                  alt="Alpha Lux logo"
-                  className="h-10 w-10 rounded-lg border border-white/10 object-cover"
-                />
-                ALPHA LUX TRANSPORTATION
-              </div>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-white/60">
-                高端包车服务官网。当前页面：{currentLabel}。可直接提交资料，通过 WhatsApp 下单与询价。
-              </p>
-            </div>
-
-            <div className="text-sm text-white/60">
-              <div>Contact</div>
-              <div className="mt-2 font-medium text-white">{company.phone}</div>
-            </div>
-
-            <div className="text-sm text-white/60">
-              <div>Featured Fleet</div>
-              <div className="mt-2 font-medium text-white">
-                Alphard 40Z · 5 Seats – 44 Seats
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
