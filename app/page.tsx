@@ -34,25 +34,6 @@ const company = {
     "3A-G-35, Straits Quay, Lorong Seri Tanjung Pinang, Seri Tanjung Pinang, 10470 Tanjung Tokong, Pulau Pinang",
 };
 
-/*
-PHOTO FILE GUIDE
-Put your photos inside /public using these exact names:
-logo.png
-hero.webp
-home1.webp
-home2.webp
-luxury.webp
-luxury2.webp
-mpv.webp
-van.webp
-van2.webp
-bus.webp
-bus_interior.webp
-interior1.webp
-interior2.webp
-about.webp
-contact.webp
-*/
 const images = {
   logo: "/logo.png",
   hero: "/hero.webp",
@@ -126,7 +107,7 @@ const content = {
         ["豪华车租借", "Luxury MPV Charter", "主打 Alphard 40Z 与高端舒适车型，适合贵宾接待与商务形象出行。"],
         ["跨州接送", "Interstate Transfer", "支持槟城及全马跨州接送，适合商务、旅游与家庭长途行程。"],
         ["长期接送服务", "Long-Term Shuttle", "提供公司长期用车、员工通勤与工厂工人巴士接送等稳定安排。"],
-      ],
+      ] as const,
       bestFor: "适合客户",
       bf1t: "家庭与游客",
       bf1d: "旅游包车、酒店接送、景点行程。",
@@ -258,7 +239,7 @@ const content = {
         ["Luxury MPV Charter", "Luxury MPV Charter", "Featuring Alphard 40Z and premium MPV service for VIP and executive travel."],
         ["Interstate Transfer", "Interstate Transfer", "Private interstate transport across Penang and Malaysia for business, family or tourism."],
         ["Long-Term Shuttle", "Long-Term Shuttle", "Company transport, employee shuttle and factory worker bus service with long-term arrangements."],
-      ],
+      ] as const,
       bestFor: "Best For",
       bf1t: "Families & Tourists",
       bf1d: "Tour charter, hotel transfer and sightseeing trips.",
@@ -347,12 +328,10 @@ const content = {
   },
 } as const;
 
-type ContentMap = typeof content;
-type LangContent = ContentMap[Lang];
-
 type FleetItem = readonly [string, string, string, string, string, string];
 type FaqItem = readonly [string, string];
 type ServiceItem = readonly [string, string, string];
+type LangContent = (typeof content)[Lang];
 
 function ButtonLink({ children, href, onClick, primary = false, external = false }: ButtonProps) {
   const className = primary
@@ -361,22 +340,13 @@ function ButtonLink({ children, href, onClick, primary = false, external = false
 
   if (href) {
     return (
-      <a
-        href={href}
-        target={external ? "_blank" : undefined}
-        rel={external ? "noreferrer" : undefined}
-        className={className}
-      >
+      <a href={href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined} className={className}>
         {children}
       </a>
     );
   }
 
-  return (
-    <button onClick={onClick} className={className}>
-      {children}
-    </button>
-  );
+  return <button onClick={onClick} className={className}>{children}</button>;
 }
 
 function SectionTitle({ eyebrow, title, desc }: SectionTitleProps) {
@@ -405,16 +375,23 @@ function PhotoCard({ src, alt, title, subtitle, tall = false }: { src: string; a
 
 function FloatingWhatsApp() {
   return (
-    <a
-      href={company.whatsappLink}
-      target="_blank"
-      rel="noreferrer"
-      className="fixed bottom-5 right-5 z-[60] inline-flex items-center gap-3 rounded-full border border-[#d4af67]/20 bg-[#111216] px-5 py-3 text-sm font-semibold text-white shadow-2xl transition hover:scale-[1.02]"
-    >
+    <a href={company.whatsappLink} target="_blank" rel="noreferrer" className="fixed bottom-5 right-5 z-[60] inline-flex items-center gap-3 rounded-full border border-[#d4af67]/20 bg-[#111216] px-5 py-3 text-sm font-semibold text-white shadow-2xl transition hover:scale-[1.02]">
       <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#d4af67] text-black">WA</span>
       <span className="hidden sm:inline">WhatsApp Us</span>
     </a>
   );
+}
+
+function getNavLabel(t: LangContent, key: PageKey) {
+  switch (key) {
+    case "home": return t.nav.home;
+    case "services": return t.nav.services;
+    case "fleet": return t.nav.fleet;
+    case "about": return t.nav.about;
+    case "booking": return t.nav.booking;
+    case "faq": return t.nav.faq;
+    default: return t.nav.home;
+  }
 }
 
 function HomePage({ lang, goTo }: { lang: Lang; goTo: (page: PageKey) => void }) {
@@ -441,11 +418,7 @@ function HomePage({ lang, goTo }: { lang: Lang; goTo: (page: PageKey) => void })
               <a href={company.facebook} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 transition hover:border-[#d4af67]/25">Facebook</a>
             </div>
             <div className="mt-10 grid gap-4 sm:grid-cols-3">
-              {[
-                [t.hero.card1t, t.hero.card1d],
-                [t.hero.card2t, t.hero.card2d],
-                [t.hero.card3t, t.hero.card3d],
-              ].map(([title, text]) => (
+              {[[t.hero.card1t, t.hero.card1d], [t.hero.card2t, t.hero.card2d], [t.hero.card3t, t.hero.card3d]].map(([title, text]) => (
                 <div key={title} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
                   <div className="text-2xl font-semibold text-[#d4af67]">{title}</div>
                   <div className="mt-2 text-sm text-white/62">{text}</div>
@@ -524,11 +497,7 @@ function ServicesPage({ lang }: { lang: Lang }) {
         <div className="rounded-[2rem] border border-white/10 bg-[#111216] p-7">
           <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">{t.services.bestFor}</div>
           <div className="mt-4 grid gap-4">
-            {[
-              [t.services.bf1t, t.services.bf1d],
-              [t.services.bf2t, t.services.bf2d],
-              [t.services.bf3t, t.services.bf3d],
-            ].map(([title, text]) => (
+            {[[t.services.bf1t, t.services.bf1d], [t.services.bf2t, t.services.bf2d], [t.services.bf3t, t.services.bf3d]].map(([title, text]) => (
               <div key={title} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
                 <div className="font-medium">{title}</div>
                 <p className="mt-2 text-sm leading-7 text-white/62">{text}</p>
@@ -584,12 +553,7 @@ function AboutPage({ lang }: { lang: Lang }) {
         <div>
           <SectionTitle eyebrow={t.about.eyebrow} title={t.about.title} desc={t.about.desc} />
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            {[
-              [t.about.box1t, t.about.box1d],
-              [t.about.box2t, t.about.box2d],
-              [t.about.box3t, t.about.box3d],
-              [t.about.box4t, t.about.box4d],
-            ].map(([title, text]) => (
+            {[[t.about.box1t, t.about.box1d], [t.about.box2t, t.about.box2d], [t.about.box3t, t.about.box3d], [t.about.box4t, t.about.box4d]].map(([title, text]) => (
               <div key={title} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
                 <div className="text-lg font-semibold">{title}</div>
                 <p className="mt-2 text-sm leading-7 text-white/63">{text}</p>
@@ -630,75 +594,32 @@ function BookingPage({ lang }: { lang: Lang }) {
       <div className="mt-10 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="rounded-[2rem] border border-white/10 bg-white/5 p-7">
           <div className="grid gap-5 sm:grid-cols-2">
-            <div>
-              <div className="mb-2 text-sm text-white/75">{t.booking.name}</div>
-              <input value={name} onChange={(e) => setName(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="Your name" />
-            </div>
-            <div>
-              <div className="mb-2 text-sm text-white/75">{t.booking.date}</div>
-              <input value={date} onChange={(e) => setDate(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="12 Apr 2026" />
-            </div>
-            <div>
-              <div className="mb-2 text-sm text-white/75">{t.booking.pickup}</div>
-              <input value={pickup} onChange={(e) => setPickup(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="Penang Airport" />
-            </div>
-            <div>
-              <div className="mb-2 text-sm text-white/75">{t.booking.destination}</div>
-              <input value={destination} onChange={(e) => setDestination(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="Gurney / KL / Ipoh" />
-            </div>
-            <div>
-              <div className="mb-2 text-sm text-white/75">{t.booking.passengers}</div>
-              <input value={passengers} onChange={(e) => setPassengers(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="2 / 4 / 10 / 30 pax" />
-            </div>
-            <div>
-              <div className="mb-2 text-sm text-white/75">{t.booking.vehicle}</div>
-              <select value={vehicle} onChange={(e) => setVehicle(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none">
-                <option>Alphard 40Z</option>
-                <option>Vellfire</option>
-                <option>Serena / Voxy / Nova</option>
-                <option>5 Seater Sedan / SUV</option>
-                <option>Van 10–18 Seater</option>
-                <option>Bus 24–44 Seater</option>
-              </select>
-            </div>
+            <div><div className="mb-2 text-sm text-white/75">{t.booking.name}</div><input value={name} onChange={(e) => setName(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="Your name" /></div>
+            <div><div className="mb-2 text-sm text-white/75">{t.booking.date}</div><input value={date} onChange={(e) => setDate(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="12 Apr 2026" /></div>
+            <div><div className="mb-2 text-sm text-white/75">{t.booking.pickup}</div><input value={pickup} onChange={(e) => setPickup(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="Penang Airport" /></div>
+            <div><div className="mb-2 text-sm text-white/75">{t.booking.destination}</div><input value={destination} onChange={(e) => setDestination(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="Gurney / KL / Ipoh" /></div>
+            <div><div className="mb-2 text-sm text-white/75">{t.booking.passengers}</div><input value={passengers} onChange={(e) => setPassengers(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="2 / 4 / 10 / 30 pax" /></div>
+            <div><div className="mb-2 text-sm text-white/75">{t.booking.vehicle}</div><select value={vehicle} onChange={(e) => setVehicle(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none"><option>Alphard 40Z</option><option>Vellfire</option><option>Serena / Voxy / Nova</option><option>5 Seater Sedan / SUV</option><option>Van 10–18 Seater</option><option>Bus 24–44 Seater</option></select></div>
           </div>
-          <div className="mt-5">
-            <div className="mb-2 text-sm text-white/75">{t.booking.hours}</div>
-            <input value={hours} onChange={(e) => setHours(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="Point to Point / 4 Hours / Full Day / Interstate" />
-          </div>
-          <div className="mt-5">
-            <div className="mb-2 text-sm text-white/75">{t.booking.notes}</div>
-            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} className="min-h-[140px] w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="Child seat / Multiple stops / Return trip / Extra luggage / VIP request" />
-          </div>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <ButtonLink primary href={submitLink} external>{t.booking.submit}</ButtonLink>
-            <ButtonLink href={company.phoneLink}>{t.booking.call}</ButtonLink>
-          </div>
+          <div className="mt-5"><div className="mb-2 text-sm text-white/75">{t.booking.hours}</div><input value={hours} onChange={(e) => setHours(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="Point to Point / 4 Hours / Full Day / Interstate" /></div>
+          <div className="mt-5"><div className="mb-2 text-sm text-white/75">{t.booking.notes}</div><textarea value={notes} onChange={(e) => setNotes(e.target.value)} className="min-h-[140px] w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="Child seat / Multiple stops / Return trip / Extra luggage / VIP request" /></div>
+          <div className="mt-6 flex flex-wrap gap-3"><ButtonLink primary href={submitLink} external>{t.booking.submit}</ButtonLink><ButtonLink href={company.phoneLink}>{t.booking.call}</ButtonLink></div>
         </div>
         <div className="space-y-6">
           <div className="rounded-[2rem] border border-white/10 bg-[#111216] p-7">
             <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">{t.booking.direct}</div>
             <div className="mt-5 space-y-4">
               {(
-  [
-    ["WhatsApp", company.whatsapp, company.whatsappLink, true],
-    ["Phone", company.phone, company.phoneLink, false],
-    ["Email", company.email, company.emailLink, false],
-    ["Instagram", "@alphalux.tt", company.instagram, true],
-    ["Facebook", "Alpha Lux Tours and Transportation", company.facebook, true],
-  ] as const
-).map(([title, text, href, external]) => (
-                <a
-                  key={title}
-                  href={href as string}
-                  target={external ? "_blank" : undefined}
-                  rel={external ? "noreferrer" : undefined}
-                  className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-[#d4af67]/25"
-                >
-                  <div>
-                    <div className="font-medium">{title}</div>
-                    <div className="mt-1 text-sm text-white/60">{text}</div>
-                  </div>
+                [
+                  ["WhatsApp", company.whatsapp, company.whatsappLink, true],
+                  ["Phone", company.phone, company.phoneLink, false],
+                  ["Email", company.email, company.emailLink, false],
+                  ["Instagram", "@alphalux.tt", company.instagram, true],
+                  ["Facebook", "Alpha Lux Tours and Transportation", company.facebook, true],
+                ] as const
+              ).map(([title, text, href, external]) => (
+                <a key={String(title)} href={href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined} className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-[#d4af67]/25">
+                  <div><div className="font-medium">{title}</div><div className="mt-1 text-sm text-white/60">{text}</div></div>
                   <div className="text-white/30">↗</div>
                 </a>
               ))}
@@ -708,9 +629,7 @@ function BookingPage({ lang }: { lang: Lang }) {
             <div className="border-b border-white/10 p-7">
               <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">{t.booking.location}</div>
               <div className="mt-3 text-sm leading-7 text-white/72">{company.address}</div>
-              <div className="mt-4">
-                <ButtonLink href={company.mapLink} external>Open in Google Maps</ButtonLink>
-              </div>
+              <div className="mt-4"><ButtonLink href={company.mapLink} external>Open in Google Maps</ButtonLink></div>
             </div>
             <iframe title="Alpha Lux Transportation Location" src="https://www.google.com/maps?q=3A-G-35%20Straits%20Quay%20Marina%20Mall%20Tanjung%20Tokong%20Penang&output=embed" className="h-[280px] w-full border-0" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
           </div>
@@ -736,31 +655,10 @@ function FaqPage({ lang }: { lang: Lang }) {
       <div className="mt-12 rounded-[2rem] border border-white/10 bg-[#111216] p-8">
         <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">{t.faq.next}</div>
         <h3 className="mt-3 text-2xl font-semibold">{t.faq.nextTitle}</h3>
-        <div className="mt-6">
-          <ButtonLink primary href={company.whatsappLink} external>{t.faq.nextBtn}</ButtonLink>
-        </div>
+        <div className="mt-6"><ButtonLink primary href={company.whatsappLink} external>{t.faq.nextBtn}</ButtonLink></div>
       </div>
     </div>
   );
-}
-
-function getNavLabel(t: LangContent, key: PageKey) {
-  switch (key) {
-    case "home":
-      return t.nav.home;
-    case "services":
-      return t.nav.services;
-    case "fleet":
-      return t.nav.fleet;
-    case "about":
-      return t.nav.about;
-    case "booking":
-      return t.nav.booking;
-    case "faq":
-      return t.nav.faq;
-    default:
-      return t.nav.home;
-  }
 }
 
 export default function Page() {
@@ -771,9 +669,7 @@ export default function Page() {
 
   useEffect(() => {
     const hash = window.location.hash.replace("#", "") as PageKey;
-    if (["home", "services", "fleet", "about", "booking", "faq"].includes(hash)) {
-      setCurrentPage(hash);
-    }
+    if (["home", "services", "fleet", "about", "booking", "faq"].includes(hash)) setCurrentPage(hash);
   }, []);
 
   useEffect(() => {
@@ -784,25 +680,18 @@ export default function Page() {
 
   const renderPage = () => {
     switch (currentPage) {
-      case "services":
-        return <ServicesPage lang={lang} />;
-      case "fleet":
-        return <FleetPage lang={lang} />;
-      case "about":
-        return <AboutPage lang={lang} />;
-      case "booking":
-        return <BookingPage lang={lang} />;
-      case "faq":
-        return <FaqPage lang={lang} />;
-      default:
-        return <HomePage lang={lang} goTo={setCurrentPage} />;
+      case "services": return <ServicesPage lang={lang} />;
+      case "fleet": return <FleetPage lang={lang} />;
+      case "about": return <AboutPage lang={lang} />;
+      case "booking": return <BookingPage lang={lang} />;
+      case "faq": return <FaqPage lang={lang} />;
+      default: return <HomePage lang={lang} goTo={setCurrentPage} />;
     }
   };
 
   return (
     <div className="min-h-screen bg-[#0b0b0d] text-white">
       <FloatingWhatsApp />
-
       <div className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
           <button onClick={() => setCurrentPage("home")} className="flex items-center gap-3 text-left">
@@ -815,11 +704,7 @@ export default function Page() {
 
           <div className="hidden items-center gap-7 md:flex">
             {pages.map((page) => (
-              <button
-                key={page.key}
-                onClick={() => setCurrentPage(page.key)}
-                className={`text-sm transition ${currentPage === page.key ? "text-[#d4af67]" : "text-white/70 hover:text-white"}`}
-              >
+              <button key={page.key} onClick={() => setCurrentPage(page.key)} className={`text-sm transition ${currentPage === page.key ? "text-[#d4af67]" : "text-white/70 hover:text-white"}`}>
                 {getNavLabel(t, page.key)}
               </button>
             ))}
@@ -840,17 +725,9 @@ export default function Page() {
               <button onClick={() => setLang("zh")} className={`rounded-full px-3 py-2 text-xs ${lang === "zh" ? "bg-[#d4af67] text-black" : "bg-white/5 text-white/75"}`}>中文</button>
               <button onClick={() => setLang("en")} className={`rounded-full px-3 py-2 text-xs ${lang === "en" ? "bg-[#d4af67] text-black" : "bg-white/5 text-white/75"}`}>EN</button>
             </div>
-               <div className="grid gap-3">
+            <div className="grid gap-3">
               {pages.map((page) => (
-                <button
-                  key={page.key}
-                  onClick={() => setCurrentPage(page.key)}
-                  className={`rounded-2xl px-4 py-3 text-left text-sm ${
-                    currentPage === page.key
-                      ? "bg-[#d4af67]/12 text-[#d4af67]"
-                      : "bg-white/5 text-white/75"
-                  }`}
-                >
+                <button key={page.key} onClick={() => setCurrentPage(page.key)} className={`rounded-2xl px-4 py-3 text-left text-sm ${currentPage === page.key ? "bg-[#d4af67]/12 text-[#d4af67]" : "bg-white/5 text-white/75"}`}>
                   {getNavLabel(t, page.key)}
                 </button>
               ))}
@@ -867,30 +744,18 @@ export default function Page() {
           <div className="grid gap-8 lg:grid-cols-[1fr_auto_auto] lg:items-center">
             <div>
               <div className="flex items-center gap-3 text-base font-semibold tracking-[0.22em] text-[#d4af67]">
-                <img
-                  src={images.logo}
-                  alt="Alpha Lux logo"
-                  className="h-10 w-10 rounded-lg border border-white/10 object-cover"
-                />
+                <img src={images.logo} alt="Alpha Lux logo" className="h-10 w-10 rounded-lg border border-white/10 object-cover" />
                 ALPHA LUX TRANSPORTATION
               </div>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-white/60">
-                {t.footer.desc}
-              </p>
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-white/60">{t.footer.desc}</p>
             </div>
-
             <div className="text-sm text-white/60">
               <div>{t.footer.contact}</div>
-              <div className="mt-2 font-medium text-white">
-                {company.phone}
-              </div>
+              <div className="mt-2 font-medium text-white">{company.phone}</div>
             </div>
-
             <div className="text-sm text-white/60">
               <div>{t.footer.featured}</div>
-              <div className="mt-2 font-medium text-white">
-                {t.footer.featuredValue}
-              </div>
+              <div className="mt-2 font-medium text-white">{t.footer.featuredValue}</div>
             </div>
           </div>
         </div>
