@@ -106,7 +106,6 @@ const content = {
       card2d: "个人到大型团队",
       card3t: "Malaysia Wide",
       card3d: "机场 · 旅游 · 跨州",
-      feature: "精选车型",
       featureTitle: "Alphard 40Z",
       featureDesc: "适合高端机场接送、VIP 接待、商务出行与婚礼用车。",
       photo1: "机场接送",
@@ -149,7 +148,7 @@ const content = {
         ["Executive Sedan / SUV", "5 座", "City / Altis / X70 / X-Trail / CRV / Hilux", "适合个人客户、小家庭与商务接待。", "3 位乘客 · 2 个中型行李", images.home1],
         ["Group Van", "10–18 座", "Staria / Starex / G10 / Van", "适合旅游包车、公司活动、团队接送与跨州出行。", "中小型团队接送", images.van],
         ["Coach / Bus", "24–44 座", "Tour Coach / Bus", "适合工厂工人接送、团体旅游、学校、企业班车与大型活动。", "大型团队接送", images.bus],
-      ],
+      ] as const,
       gallery1: "豪华内饰",
       gallery1d: "可替换成 VIP 座椅、车内细节或高端接待照片。",
       gallery2: "车内空间",
@@ -202,7 +201,7 @@ const content = {
         ["价格怎么计算？", "点对点服务会根据路线单独报价；小时包车最低 4 小时起。更长路线、跨州行程或团队接送可按需求定制报价。"],
         ["可以预订槟城以外的行程吗？", "可以。我们支持槟城及全马来西亚包车和跨州接送服务。"],
         ["如何下单？", "填写 Booking Form 后点击按钮，系统会直接跳转 WhatsApp，把资料发送给我们确认。"],
-      ],
+      ] as const,
       next: "立即联系",
       nextTitle: "准备开始预订？",
       nextBtn: "WhatsApp 联系 Alpha Lux",
@@ -239,7 +238,6 @@ const content = {
       card2d: "Private to group travel",
       card3t: "Malaysia Wide",
       card3d: "Airport · Tour · Interstate",
-      feature: "Featured Vehicle",
       featureTitle: "Alphard 40Z",
       featureDesc: "Ideal for luxury airport transfer, executive chauffeur service and VIP private charter.",
       photo1: "Airport Transfer",
@@ -282,7 +280,7 @@ const content = {
         ["Executive Sedan / SUV", "5 Seater", "City / Altis / X70 / X-Trail / CRV / Hilux", "Suitable for solo travelers, couples, small families and business clients.", "3 passengers · 2 medium luggage", images.home1],
         ["Group Van", "10–18 Seater", "Staria / Starex / G10 / Van", "Ideal for tour groups, events, team movement and interstate trips.", "Small to medium group transport", images.van],
         ["Coach / Bus", "24–44 Seater", "Tour Coach / Bus", "Best for factory workers, group tours, schools, company shuttle and large events.", "Large group transport", images.bus],
-      ],
+      ] as const,
       gallery1: "Luxury Interior",
       gallery1d: "Replace this with your best VIP seat or premium cabin photo.",
       gallery2: "Cabin Comfort",
@@ -335,7 +333,7 @@ const content = {
         ["How is the price calculated?", "Point-to-point service is quoted based on route. Hourly charter starts from a minimum of 4 hours. Longer or interstate trips can be customized."],
         ["Can I book outstation or interstate trips?", "Yes. We provide private transport across Penang and Malaysia."],
         ["How do I place an order?", "Fill in the booking form and click the button to send your details directly to us via WhatsApp."],
-      ],
+      ] as const,
       next: "Next Step",
       nextTitle: "Ready to book?",
       nextBtn: "WhatsApp Alpha Lux",
@@ -348,6 +346,13 @@ const content = {
     },
   },
 } as const;
+
+type ContentMap = typeof content;
+type LangContent = ContentMap[Lang];
+
+type FleetItem = readonly [string, string, string, string, string, string];
+type FaqItem = readonly [string, string];
+type ServiceItem = readonly [string, string, string];
 
 function ButtonLink({ children, href, onClick, primary = false, external = false }: ButtonProps) {
   const className = primary
@@ -461,7 +466,7 @@ function HomePage({ lang, goTo }: { lang: Lang; goTo: (page: PageKey) => void })
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <SectionTitle eyebrow={t.services.eyebrow} title={t.services.title} desc={t.services.desc} />
         <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {t.services.list.map(([title, en, desc]) => (
+          {(t.services.list as readonly ServiceItem[]).map(([title, en, desc]) => (
             <div key={title} className="rounded-[1.75rem] border border-white/10 bg-white/5 p-6">
               <div className="text-xs uppercase tracking-[0.25em] text-[#d4af67]">{en}</div>
               <h3 className="mt-3 text-xl font-semibold">{title}</h3>
@@ -481,7 +486,7 @@ function HomePage({ lang, goTo }: { lang: Lang; goTo: (page: PageKey) => void })
             </div>
           </div>
           <div className="grid gap-5 sm:grid-cols-2">
-            {t.fleet.items.map(([category, size, title, desc, note, image]) => (
+            {(t.fleet.items as readonly FleetItem[]).map(([category, size, title, desc, note, image]) => (
               <div key={title} className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#111216]">
                 <img src={image} alt={title} className="h-[190px] w-full object-cover" />
                 <div className="p-5">
@@ -506,7 +511,7 @@ function ServicesPage({ lang }: { lang: Lang }) {
     <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
       <SectionTitle eyebrow={t.services.eyebrow} title={t.services.title} desc={t.services.desc} />
       <div className="mt-10 grid gap-6 lg:grid-cols-2">
-        {t.services.list.map(([title, en, desc]) => (
+        {(t.services.list as readonly ServiceItem[]).map(([title, en, desc]) => (
           <div key={title} className="rounded-[2rem] border border-white/10 bg-white/5 p-7">
             <div className="text-xs uppercase tracking-[0.24em] text-[#d4af67]">{en}</div>
             <h3 className="mt-2 text-2xl font-semibold">{title}</h3>
@@ -545,7 +550,7 @@ function FleetPage({ lang }: { lang: Lang }) {
     <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
       <SectionTitle eyebrow={t.fleet.eyebrow} title={t.fleet.title} desc={t.fleet.desc} />
       <div className="mt-10 grid gap-6 lg:grid-cols-2">
-        {t.fleet.items.map(([category, size, title, desc, note, image]) => (
+        {(t.fleet.items as readonly FleetItem[]).map(([category, size, title, desc, note, image]) => (
           <div key={title} className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/5">
             <img src={image} alt={title} className="h-[260px] w-full object-cover" />
             <div className="p-7">
@@ -719,7 +724,7 @@ function FaqPage({ lang }: { lang: Lang }) {
     <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
       <SectionTitle eyebrow={t.faq.eyebrow} title={t.faq.title} desc={t.faq.desc} />
       <div className="mt-10 grid gap-5">
-        {t.faq.list.map(([q, a]) => (
+        {(t.faq.list as readonly FaqItem[]).map(([q, a]) => (
           <div key={q} className="rounded-[1.75rem] border border-white/10 bg-white/5 p-6">
             <h3 className="text-lg font-semibold">{q}</h3>
             <p className="mt-3 text-sm leading-8 text-white/64">{a}</p>
@@ -735,6 +740,25 @@ function FaqPage({ lang }: { lang: Lang }) {
       </div>
     </div>
   );
+}
+
+function getNavLabel(t: LangContent, key: PageKey) {
+  switch (key) {
+    case "home":
+      return t.nav.home;
+    case "services":
+      return t.nav.services;
+    case "fleet":
+      return t.nav.fleet;
+    case "about":
+      return t.nav.about;
+    case "booking":
+      return t.nav.booking;
+    case "faq":
+      return t.nav.faq;
+    default:
+      return t.nav.home;
+  }
 }
 
 export default function Page() {
@@ -788,12 +812,15 @@ export default function Page() {
           </button>
 
           <div className="hidden items-center gap-7 md:flex">
-            <button onClick={() => setCurrentPage("home")} className={`text-sm transition ${currentPage === "home" ? "text-[#d4af67]" : "text-white/70 hover:text-white"}`}>{t.nav.home}</button>
-            <button onClick={() => setCurrentPage("services")} className={`text-sm transition ${currentPage === "services" ? "text-[#d4af67]" : "text-white/70 hover:text-white"}`}>{t.nav.services}</button>
-            <button onClick={() => setCurrentPage("fleet")} className={`text-sm transition ${currentPage === "fleet" ? "text-[#d4af67]" : "text-white/70 hover:text-white"}`}>{t.nav.fleet}</button>
-            <button onClick={() => setCurrentPage("about")} className={`text-sm transition ${currentPage === "about" ? "text-[#d4af67]" : "text-white/70 hover:text-white"}`}>{t.nav.about}</button>
-            <button onClick={() => setCurrentPage("booking")} className={`text-sm transition ${currentPage === "booking" ? "text-[#d4af67]" : "text-white/70 hover:text-white"}`}>{t.nav.booking}</button>
-            <button onClick={() => setCurrentPage("faq")} className={`text-sm transition ${currentPage === "faq" ? "text-[#d4af67]" : "text-white/70 hover:text-white"}`}>{t.nav.faq}</button>
+            {pages.map((page) => (
+              <button
+                key={page.key}
+                onClick={() => setCurrentPage(page.key)}
+                className={`text-sm transition ${currentPage === page.key ? "text-[#d4af67]" : "text-white/70 hover:text-white"}`}
+              >
+                {getNavLabel(t, page.key)}
+              </button>
+            ))}
           </div>
 
           <div className="hidden items-center gap-3 md:flex">
@@ -807,18 +834,18 @@ export default function Page() {
 
         {mobileOpen ? (
           <div className="border-t border-white/10 bg-[#0d0d10] px-6 py-4 md:hidden">
-            <div className="mb-4 flex gap-3">
-              <button onClick={() => setLang("zh")} className={`rounded-full px-3 py-2 text-xs ${lang === "zh" ? "bg-[#d4af67] text-black" : "bg-white/5 text-white/75"}`}>中文</button>
-              <button onClick={() => setLang("en")} className={`rounded-full px-3 py-2 text-xs ${lang === "en" ? "bg-[#d4af67] text-black" : "bg-white/5 text-white/75"}`}>EN</button>
-            </div>
-            <div className="grid gap-3">
+                       <div className="grid gap-3">
               {pages.map((page) => (
                 <button
                   key={page.key}
                   onClick={() => setCurrentPage(page.key)}
-                  className={`rounded-2xl px-4 py-3 text-left text-sm ${currentPage === page.key ? "bg-[#d4af67]/12 text-[#d4af67]" : "bg-white/5 text-white/75"}`}
+                  className={`rounded-2xl px-4 py-3 text-left text-sm ${
+                    currentPage === page.key
+                      ? "bg-[#d4af67]/12 text-[#d4af67]"
+                      : "bg-white/5 text-white/75"
+                  }`}
                 >
-                  {t.nav[page.key]}
+                  {getNavLabel(t, page.key)}
                 </button>
               ))}
             </div>
@@ -834,18 +861,30 @@ export default function Page() {
           <div className="grid gap-8 lg:grid-cols-[1fr_auto_auto] lg:items-center">
             <div>
               <div className="flex items-center gap-3 text-base font-semibold tracking-[0.22em] text-[#d4af67]">
-                <img src={images.logo} alt="Alpha Lux logo" className="h-10 w-10 rounded-lg border border-white/10 object-cover" />
+                <img
+                  src={images.logo}
+                  alt="Alpha Lux logo"
+                  className="h-10 w-10 rounded-lg border border-white/10 object-cover"
+                />
                 ALPHA LUX TRANSPORTATION
               </div>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-white/60">{t.footer.desc}</p>
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-white/60">
+                {t.footer.desc}
+              </p>
             </div>
+
             <div className="text-sm text-white/60">
               <div>{t.footer.contact}</div>
-              <div className="mt-2 font-medium text-white">{company.phone}</div>
+              <div className="mt-2 font-medium text-white">
+                {company.phone}
+              </div>
             </div>
+
             <div className="text-sm text-white/60">
               <div>{t.footer.featured}</div>
-              <div className="mt-2 font-medium text-white">{t.footer.featuredValue}</div>
+              <div className="mt-2 font-medium text-white">
+                {t.footer.featuredValue}
+              </div>
             </div>
           </div>
         </div>
