@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 
 type Lang = "zh" | "en";
 type PageKey = "home" | "services" | "fleet" | "about" | "booking" | "faq";
 
 type ButtonProps = {
-  children: React.ReactNode;
+  children: ReactNode;
   href?: string;
   onClick?: () => void;
   primary?: boolean;
@@ -18,6 +18,10 @@ type SectionTitleProps = {
   title: string;
   desc?: string;
 };
+
+type ServiceItem = readonly [title: string, subtitle: string, desc: string];
+type FleetItem = readonly [category: string, size: string, title: string, desc: string, note: string, image: string];
+type FaqItem = readonly [question: string, answer: string];
 
 const company = {
   name: "Alpha Lux Transportation",
@@ -74,115 +78,117 @@ const content = {
     },
     hero: {
       badge: "槟城及全马高端包车服务",
-      title1: "高端机场接送与商务包车服务",
+      title1: "高端机场接送、商务出行与旅游包车服务",
       title2: "Premium Private Transport in Penang & Malaysia",
       desc:
-        "Alpha Lux Transportation 专注机场接送、商务接待、旅游包车、点对点接送、婚礼用车与跨州出行。主推 Alphard 40Z，车队覆盖 5 座到 44 座，适合个人客户、家庭旅客、企业团队与贵宾行程。",
-      cta1: "WhatsApp 询价",
+        "Alpha Lux Transportation 专注机场接送、企业商务出行、私人旅游包车、点对点接送、婚礼用车与跨州接送。主打 Alphard 40Z，车队覆盖 5 座至 44 座，为个人客户、家庭旅客、企业团队与贵宾行程提供舒适、专业、体面的出行安排。",
+      cta1: "WhatsApp 立即询价",
       cta2: "查看车队",
       cta3: "查看位置",
       card1t: "Alphard 40Z",
       card1d: "旗舰豪华 MPV",
       card2t: "5–44 座",
-      card2d: "个人到大型团队",
+      card2d: "个人至大型团队",
       card3t: "Malaysia Wide",
-      card3d: "机场 · 旅游 · 跨州",
-      featureTitle: "Alphard 40Z",
-      featureDesc: "适合高端机场接送、VIP 接待、商务出行与婚礼用车。",
-      photo1: "机场接送",
-      photo1d: "可替换成机场、酒店接客或商务迎宾照片。",
-      photo2: "商务接待",
-      photo2d: "可替换成酒店门口、城市接送或贵宾出行照片。",
+      card3d: "机场 · 商务 · 旅游 · 跨州",
+      featureTitle: "旗舰豪华接送体验",
+      featureDesc: "适合 VIP 迎送、商务接待、婚礼用车与高端机场接送。",
+      photo1: "机场与酒店接送",
+      photo1d: "准时接送、行李友好、适合旅客与商务客户。",
+      photo2: "商务与贵宾出行",
+      photo2d: "为会议、接待与重要行程提供更体面的出行安排。",
     },
     services: {
       eyebrow: "我们的服务",
-      title: "为不同出行场景提供舒适可靠的安排",
-      desc: "从个人接送到企业团队出行，都能根据需求灵活安排合适车型与路线。",
+      title: "为不同出行场景提供舒适、可靠、专业的交通安排",
+      desc: "无论是个人客户、家庭出游、企业商务接待，还是大型团队接送，我们都能根据人数、路线与场景安排合适车型。",
       list: [
-        ["机场接送", "Airport Transfer", "提供准时机场接送、酒店接驳、航班时段安排与 VIP 迎送服务。"],
-        ["商务出行", "Corporate Travel", "适合公司客户、会议接待、贵宾接送、展会活动与长期企业合作。"],
-        ["旅游包车", "Private Tour Charter", "槟城及全马包车，支持多站行程、家庭出游、景点安排与定制路线。"],
-        ["点对点服务", "Point-to-Point", "从住宅、酒店、景点、商场到任意目的地，享受舒适直接的接送体验。"],
-        ["婚礼用车", "Wedding Transport", "提供高端婚礼接送、贵宾用车与特别场合出行服务。"],
-        ["豪华车租借", "Luxury MPV Charter", "主打 Alphard 40Z 与高端舒适车型，适合贵宾接待与商务形象出行。"],
-        ["跨州接送", "Interstate Transfer", "支持槟城及全马跨州接送，适合商务、旅游与家庭长途行程。"],
-        ["长期接送服务", "Long-Term Shuttle", "提供公司长期用车、员工通勤与工厂工人巴士接送等稳定安排。"],
-      ] as const,
-      bestFor: "适合客户",
-      bf1t: "家庭与游客",
-      bf1d: "旅游包车、酒店接送、景点行程。",
-      bf2t: "企业客户",
-      bf2d: "会议、展会、商务贵宾接待。",
-      bf3t: "机场旅客",
-      bf3d: "准时接送、行李空间与舒适出行。",
+        ["机场接送", "Airport Transfer", "提供机场、酒店、住宅与指定地点接送服务，适合旅客、商务客户与贵宾行程。"],
+        ["商务出行", "Corporate Travel", "适合会议接待、企业客户、贵宾接送、展会活动与长期商务合作。"],
+        ["旅游包车", "Private Tour Charter", "适合槟城与全马私人包车、多站行程、家庭旅行与定制路线安排。"],
+        ["点对点接送", "Point-to-Point Transfer", "从任何出发地点到目的地，享受更轻松、更舒适、更直接的接送体验。"],
+        ["婚礼用车", "Wedding Transport", "适合婚礼接送、贵宾用车、特别场合与高端形象出行。"],
+        ["豪华 MPV 包车", "Luxury MPV Charter", "主打 Alphard 40Z 与高端 MPV，适合贵宾接待与商务用车。"],
+        ["跨州接送", "Interstate Transfer", "支持槟城及全马跨州接送，适合旅游、商务与家庭长途出行。"],
+        ["长期接送服务", "Long-Term Shuttle", "支持企业长期用车、员工班车与工厂工人巴士接送安排。"],
+      ] as const satisfies readonly ServiceItem[],
+      bestFor: "推荐客户类型",
+      bf1t: "家庭与旅客",
+      bf1d: "适合机场接送、旅游包车、酒店接送与景点路线。",
+      bf2t: "企业与商务客户",
+      bf2d: "适合会议接待、贵宾接送、展会活动与长期合作。",
+      bf3t: "团队与活动接送",
+      bf3d: "适合公司团队、婚礼、旅游团、学校与大型活动安排。",
       button: "咨询服务方案",
+      bannerTitle: "准时接送，安心出行",
+      bannerDesc: "提供机场、酒店、商务场所与指定地点接送服务，让每一段旅程更轻松顺畅。",
     },
     fleet: {
       eyebrow: "精选车队",
-      title: "从豪华 Alphard 到团体巴士，一站式安排",
-      desc: "家庭旅客、商务客户、酒店接送、公司团队和大型活动，都能根据人数与场景安排合适车型。",
+      title: "从豪华 Alphard 到团队巴士，一站式安排",
+      desc: "根据人数、场景与预算安排合适车型，兼顾舒适度、品牌形象与行程效率。",
       button1: "查看完整车队",
       button2: "获取报价",
       items: [
-        ["Luxury Flagship", "豪华 7 座", "Alphard 40Z / Vellfire", "主推 Alphard 40Z，适合 VIP 接待、高端商务、婚礼用车与豪华机场接送。", "4–6 位乘客 · 2 个大型行李", images.luxury],
-        ["Family MPV", "7 座", "Serena / Voxy / Nova", "适合家庭旅游、酒店接送与舒适城际出行。", "4–5 位乘客 · 1 大 1 中行李", images.mpv],
-        ["Executive Sedan / SUV", "5 座", "City / Altis / X70 / X-Trail / CRV / Hilux", "适合个人客户、小家庭与商务接待。", "3 位乘客 · 2 个中型行李", images.home1],
-        ["Group Van", "10–18 座", "Staria / Starex / G10 / Van", "适合旅游包车、公司活动、团队接送与跨州出行。", "中小型团队接送", images.van],
-        ["Coach / Bus", "24–44 座", "Tour Coach / Bus", "适合工厂工人接送、团体旅游、学校、企业班车与大型活动。", "大型团队接送", images.bus],
-      ] as const,
-      gallery1: "豪华内饰",
-      gallery1d: "可替换成 VIP 座椅、车内细节或高端接待照片。",
-      gallery2: "车内空间",
-      gallery2d: "可替换成第二排、内装或舒适空间照片。",
-      gallery3: "巴士内装",
-      gallery3d: "可替换成巴士座位、团队出行与大巴内饰照片。",
+        ["Luxury Flagship", "豪华 7 座", "Alphard 40Z / Vellfire", "主打 Alphard 40Z，适合 VIP 接待、高端商务、婚礼用车与豪华机场接送。", "4–6 位乘客 · 2 个大型行李", images.luxury],
+        ["Family / Business MPV", "7 座", "Serena / Voxy / Nova", "适合家庭旅客、酒店接送、城市出行与舒适城际路线。", "4–5 位乘客 · 1 大 1 中行李", images.mpv],
+        ["Executive Sedan / SUV", "5 座", "City / Altis / X70 / X-Trail / CRV / Hilux", "适合个人客户、小家庭与日常商务接待。", "3 位乘客 · 2 个中型行李", images.home1],
+        ["Group Van", "10–18 座", "Staria / Starex / G10 / Van", "适合旅游包车、团队接送、活动安排与跨州出行。", "中小型团队接送", images.van],
+        ["Coach / Bus", "24–44 座", "Tour Coach / Bus", "适合工厂工人接送、团体旅游、学校、公司班车与大型活动。", "大型团队接送", images.bus],
+      ] as const satisfies readonly FleetItem[],
+      gallery1: "豪华舒适乘坐体验",
+      gallery1d: "甄选高端内饰与宽敞座椅，为机场接送、商务接待与贵宾出行提供更舒适的乘坐体验。",
+      gallery2: "宽敞车内空间",
+      gallery2d: "充足座位与行李空间，适合家庭旅客、商务客户与长途接送行程。",
+      gallery3: "团体出行更轻松",
+      gallery3d: "适合公司团队、旅游团、活动接送与大型出行安排，兼顾效率与舒适度。",
     },
     about: {
       eyebrow: "关于我们",
       title: "专业、舒适、可靠的私人接送服务",
-      desc: "我们致力于为客户提供更体面、更安心的出行体验。",
-      box1t: "专业可靠",
-      box1d: "注重品牌形象、行程安排与客户体验。",
-      box2t: "准时服务",
-      box2d: "机场接送与商务行程更需要时间管理。",
-      box3t: "高端体验",
-      box3d: "舒适车型、礼貌服务与商务级接待感。",
-      box4t: "灵活配车",
-      box4d: "从个人到大型团队都能快速安排。",
-      imageTitle: "品牌与信任",
-      imageDesc: "可替换成 Logo、司机形象照、车队合照或酒店门口接待照片。",
+      desc: "从个人客户到企业团队，我们坚持以准时、礼貌、舒适与专业为服务核心。",
+      box1t: "专业形象",
+      box1d: "注重车辆整洁、服务细节与整体品牌体验。",
+      box2t: "准时可靠",
+      box2d: "机场、商务与重要行程，更需要稳定的时间管理。",
+      box3t: "舒适体验",
+      box3d: "高端车型、宽敞空间与更安心的乘坐感受。",
+      box4t: "灵活安排",
+      box4d: "从个人接送到大型团队，都可快速安排合适车型。",
+      imageTitle: "值得信赖的出行安排",
+      imageDesc: "从个人接送到企业团队用车，我们坚持准时、专业、舒适的服务标准，提供更安心的出行体验。",
       profile: "公司简介",
       profileText:
-        "Alpha Lux Transportation 自 2023 年开始运营，致力于为客户提供高端、舒适、可靠的地面交通服务。我们专注于机场接送、企业商务出行、私人旅游包车、点对点接送、婚礼用车、豪华车租借、跨州接送，以及公司长期接送与工厂工人巴士服务。无论是个人客户、家庭旅客、企业团队还是大型团体，我们都以专业态度、灵活配车和细致安排，为每一段旅程带来更安心、更体面的出行体验。",
+        "Alpha Lux Transportation 致力于为客户提供高端、舒适、可靠的地面交通服务。我们专注于机场接送、企业商务出行、私人旅游包车、点对点接送、婚礼用车、豪华 MPV 包车、跨州接送，以及长期接送与团体巴士安排。无论是个人客户、家庭旅客、企业团队还是大型团体，我们都以专业态度、灵活配车和细致安排，为每一段旅程带来更安心、更体面的出行体验。",
     },
     booking: {
       eyebrow: "立即预订",
-      title: "填写资料后直接 WhatsApp 下单",
-      desc: "客户提交资料后会直接跳转 WhatsApp，把完整订单资料发送给你，方便你马上回复确认。",
-      name: "姓名 Name",
-      date: "用车日期 Date",
-      pickup: "上车地点 Pick Up",
-      destination: "目的地 Destination",
-      passengers: "人数 Passengers",
-      vehicle: "车型 Vehicle",
-      hours: "小时 / 行程类型",
-      notes: "备注 Notes",
-      submit: "WhatsApp 立即下单",
+      title: "填写资料后直接 WhatsApp 下单或询价",
+      desc: "提交资料后会直接跳转 WhatsApp，并自动带入订单信息，方便快速确认行程与报价。",
+      name: "姓名",
+      date: "用车日期",
+      pickup: "上车地点",
+      destination: "目的地",
+      passengers: "人数",
+      vehicle: "车型需求",
+      hours: "行程类型 / 包车时数",
+      notes: "备注",
+      submit: "WhatsApp 立即发送",
       call: "直接致电",
-      direct: "联系信息",
-      location: "位置",
+      direct: "联系方式",
+      location: "公司位置",
     },
     faq: {
       eyebrow: "常见问题",
       title: "预订前最常见的问题",
-      desc: "如需更快报价，也可以直接 WhatsApp 联系我们。",
+      desc: "如需更快报价，也可直接通过 WhatsApp 联系我们。",
       list: [
-        ["你们提供哪些服务？", "我们提供机场接送、商务出行、旅游包车、点对点接送、婚礼用车、豪华车租借、跨州接送、公司长期接送及工厂工人巴士接送服务。"],
-        ["主推车型是什么？", "我们的主推车型是 Alphard 40Z，适合高端机场接送、商务客户、婚礼用车与 VIP 贵宾行程。"],
-        ["价格怎么计算？", "点对点服务会根据路线单独报价；小时包车最低 4 小时起。更长路线、跨州行程或团队接送可按需求定制报价。"],
+        ["你们提供哪些服务？", "我们提供机场接送、商务出行、旅游包车、点对点接送、婚礼用车、豪华 MPV 包车、跨州接送、长期接送与团体巴士服务。"],
+        ["主打车型是什么？", "我们的主打车型是 Alphard 40Z，适合高端机场接送、VIP 接待、商务客户与婚礼用车。"],
+        ["价格怎么计算？", "点对点服务会根据路线单独报价；包车一般可按时数、车型与路线安排提供报价。"],
         ["可以预订槟城以外的行程吗？", "可以。我们支持槟城及全马来西亚包车和跨州接送服务。"],
-        ["如何下单？", "填写 Booking Form 后点击按钮，系统会直接跳转 WhatsApp，把资料发送给我们确认。"],
-      ] as const,
+        ["如何下单？", "填写表单后点击按钮，系统会直接跳转 WhatsApp，把资料发送给我们确认。"],
+      ] as const satisfies readonly FaqItem[],
       next: "立即联系",
       nextTitle: "准备开始预订？",
       nextBtn: "WhatsApp 联系 Alpha Lux",
@@ -205,122 +211,124 @@ const content = {
       bookNow: "Book Now",
     },
     hero: {
-      badge: "Penang & Malaysia Luxury Chauffeur",
-      title1: "Luxury Chauffeur Experience",
-      title2: "for Airport, Corporate & VIP Travel",
+      badge: "Premium chauffeur service in Penang & Malaysia",
+      title1: "Luxury airport transfer, corporate travel",
+      title2: "and private charter service",
       desc:
-        "Alpha Lux Transportation specializes in airport transfer, corporate travel, private tour charter, point-to-point transfer, wedding transport and interstate travel. Our fleet ranges from 5 seats to 44 seats, with Alphard 40Z as our signature luxury vehicle.",
+        "Alpha Lux Transportation specializes in airport transfer, corporate travel, private tour charter, point-to-point transfer, wedding transport and interstate journeys. With Alphard 40Z as our signature luxury vehicle and fleet options from 5 to 44 seats, we provide professional and comfortable transport for individuals, families, business clients and VIP travel.",
       cta1: "Get Quote via WhatsApp",
-      cta2: "View Luxury Fleet",
-      cta3: "View Our Location",
+      cta2: "View Fleet",
+      cta3: "View Location",
       card1t: "Alphard 40Z",
-      card1d: "VIP flagship vehicle",
+      card1d: "Flagship luxury MPV",
       card2t: "5–44 Seats",
-      card2d: "Private to group travel",
+      card2d: "Private to large group travel",
       card3t: "Malaysia Wide",
-      card3d: "Airport · Tour · Interstate",
-      featureTitle: "Alphard 40Z",
-      featureDesc: "Ideal for luxury airport transfer, executive chauffeur service and VIP private charter.",
-      photo1: "Airport Transfer",
-      photo1d: "Replace this with your best airport or hotel pickup image.",
-      photo2: "Corporate Travel",
-      photo2d: "Replace this with your best business or premium arrival image.",
+      card3d: "Airport · Corporate · Tour · Interstate",
+      featureTitle: "Premium arrival experience",
+      featureDesc: "Ideal for VIP reception, executive transfer, wedding transport and luxury airport pickup.",
+      photo1: "Airport & Hotel Transfer",
+      photo1d: "Punctual pickup with luggage-friendly and comfortable travel experience.",
+      photo2: "Business & VIP Travel",
+      photo2d: "A more polished and professional transport arrangement for important journeys.",
     },
     services: {
       eyebrow: "Our Services",
-      title: "Comfortable and reliable transport for every travel need",
-      desc: "From personal transfer to business and group transportation, we arrange the right vehicle for every journey.",
+      title: "Professional, comfortable and reliable transport for different travel needs",
+      desc: "Whether for personal transfer, family trips, corporate reception or group movement, we arrange the right vehicle based on route, group size and occasion.",
       list: [
-        ["Airport Transfer", "Airport Transfer", "On-time airport transfer, hotel transfer, flight-based scheduling and VIP pickup service."],
-        ["Corporate Travel", "Corporate Travel", "Professional chauffeur service for meetings, VIP guests, exhibitions and business clients."],
-        ["Private Tour Charter", "Private Tour Charter", "Customized transport for Penang and across Malaysia, including multiple stops and family tours."],
-        ["Point-to-Point", "Point-to-Point", "Direct private transfer from home, hotel, attraction or mall to any destination."],
-        ["Wedding Transport", "Wedding Transport", "Luxury wedding transport and premium private car service for special events."],
-        ["Luxury MPV Charter", "Luxury MPV Charter", "Featuring Alphard 40Z and premium MPV service for VIP and executive travel."],
-        ["Interstate Transfer", "Interstate Transfer", "Private interstate transport across Penang and Malaysia for business, family or tourism."],
-        ["Long-Term Shuttle", "Long-Term Shuttle", "Company transport, employee shuttle and factory worker bus service with long-term arrangements."],
-      ] as const,
+        ["Airport Transfer", "Airport Transfer", "Pickup and drop-off for airport, hotel, home and designated locations, suitable for travelers, executives and VIP guests."],
+        ["Corporate Travel", "Corporate Travel", "Ideal for meetings, business clients, VIP reception, exhibitions and long-term corporate use."],
+        ["Private Tour Charter", "Private Tour Charter", "Suitable for Penang and Malaysia private charter, multi-stop itinerary, family travel and custom routes."],
+        ["Point-to-Point Transfer", "Point-to-Point Transfer", "Enjoy direct, comfortable and convenient private transfer from any pickup point to your destination."],
+        ["Wedding Transport", "Wedding Transport", "Suitable for wedding transport, VIP use and special occasions requiring a premium image."],
+        ["Luxury MPV Charter", "Luxury MPV Charter", "Featuring Alphard 40Z and premium MPV options for executive, VIP and business travel."],
+        ["Interstate Transfer", "Interstate Transfer", "Available for private interstate journeys across Penang and Malaysia for travel, family or business purposes."],
+        ["Long-Term Shuttle", "Long-Term Shuttle", "Available for company transport, employee shuttle and factory worker bus arrangements."],
+      ] as const satisfies readonly ServiceItem[],
       bestFor: "Best For",
-      bf1t: "Families & Tourists",
-      bf1d: "Tour charter, hotel transfer and sightseeing trips.",
-      bf2t: "Corporate Clients",
-      bf2d: "Meetings, exhibitions and executive guest transport.",
-      bf3t: "Airport Travelers",
-      bf3d: "On-time pickup, luggage space and comfortable transfer.",
+      bf1t: "Families & Travelers",
+      bf1d: "Airport transfer, tour charter, hotel transfer and sightseeing routes.",
+      bf2t: "Corporate & Business Clients",
+      bf2d: "Meetings, executive reception, exhibitions and long-term cooperation.",
+      bf3t: "Teams & Events",
+      bf3d: "Suitable for company teams, weddings, tour groups, schools and event transfers.",
       button: "Ask for Service Plan",
+      bannerTitle: "Punctual pickup, smoother travel",
+      bannerDesc: "Airport, hotel, business venue and designated location transfer designed for convenience, comfort and peace of mind.",
     },
     fleet: {
-      eyebrow: "Fleet Preview",
-      title: "From luxury Alphard to group coaches, all in one place",
-      desc: "Whether for family travel, business guests, hotel transfer or large group movement, we provide suitable vehicle options.",
+      eyebrow: "Featured Fleet",
+      title: "From luxury Alphard to group coaches, all in one arrangement",
+      desc: "We recommend suitable vehicle options based on passenger count, trip style and service level, with comfort and efficiency in mind.",
       button1: "View Full Fleet",
-      button2: "Get Instant Quote",
+      button2: "Get Quote",
       items: [
-        ["Luxury Flagship", "Luxury 7 Seater", "Alphard 40Z / Vellfire", "Our signature Alphard 40Z is perfect for VIP reception, executive transfer, wedding use and premium airport service.", "4–6 passengers · 2 large luggage", images.luxury],
-        ["Family MPV", "7 Seater", "Serena / Voxy / Nova", "Ideal for family travel, hotel pickup and comfortable intercity journeys.", "4–5 passengers · 1 large + 1 medium luggage", images.mpv],
-        ["Executive Sedan / SUV", "5 Seater", "City / Altis / X70 / X-Trail / CRV / Hilux", "Suitable for solo travelers, couples, small families and business clients.", "3 passengers · 2 medium luggage", images.home1],
-        ["Group Van", "10–18 Seater", "Staria / Starex / G10 / Van", "Ideal for tour groups, events, team movement and interstate trips.", "Small to medium group transport", images.van],
-        ["Coach / Bus", "24–44 Seater", "Tour Coach / Bus", "Best for factory workers, group tours, schools, company shuttle and large events.", "Large group transport", images.bus],
-      ] as const,
-      gallery1: "Luxury Interior",
-      gallery1d: "Replace this with your best VIP seat or premium cabin photo.",
-      gallery2: "Cabin Comfort",
-      gallery2d: "Replace this with your best second-row or interior space photo.",
-      gallery3: "Coach Interior",
-      gallery3d: "Replace this with your best bus cabin or team transport image.",
+        ["Luxury Flagship", "Luxury 7 Seater", "Alphard 40Z / Vellfire", "Our signature Alphard 40Z is ideal for VIP reception, executive travel, wedding use and luxury airport service.", "4–6 passengers · 2 large luggage", images.luxury],
+        ["Family / Business MPV", "7 Seater", "Serena / Voxy / Nova", "Suitable for family travel, hotel transfer, city routes and comfortable intercity journeys.", "4–5 passengers · 1 large + 1 medium luggage", images.mpv],
+        ["Executive Sedan / SUV", "5 Seater", "City / Altis / X70 / X-Trail / CRV / Hilux", "A practical choice for solo travelers, couples, small families and daily business use.", "3 passengers · 2 medium luggage", images.home1],
+        ["Group Van", "10–18 Seater", "Staria / Starex / G10 / Van", "Suitable for tour groups, team transfer, events and interstate travel.", "Small to medium group transfer", images.van],
+        ["Coach / Bus", "24–44 Seater", "Tour Coach / Bus", "Suitable for factory workers, group tours, schools, company shuttles and large events.", "Large group transfer", images.bus],
+      ] as const satisfies readonly FleetItem[],
+      gallery1: "Premium cabin comfort",
+      gallery1d: "High-quality seating and refined interior ambience for airport transfer, executive reception and VIP travel.",
+      gallery2: "Spacious interior layout",
+      gallery2d: "Comfortable seating and practical luggage space for family travelers, business guests and longer journeys.",
+      gallery3: "Better for group movement",
+      gallery3d: "Suitable for company teams, tour groups, event transfer and larger travel arrangements with better efficiency and comfort.",
     },
     about: {
       eyebrow: "About Us",
       title: "Professional, comfortable and reliable private transport",
-      desc: "We are committed to providing every customer with a smoother and more premium travel experience.",
-      box1t: "Professional",
-      box1d: "Strong focus on service image, planning and customer experience.",
-      box2t: "Punctual",
-      box2d: "Time management matters especially for airport and corporate trips.",
-      box3t: "Premium",
-      box3d: "Comfortable vehicles, polite service and executive-level travel feel.",
-      box4t: "Flexible Fleet",
-      box4d: "From personal trips to large groups, we can arrange quickly.",
-      imageTitle: "Brand & Trust",
-      imageDesc: "Replace this with your logo, driver image, fleet lineup or premium hotel entrance photo.",
+      desc: "From private customers to corporate teams, we focus on punctuality, courtesy, comfort and professional service standards.",
+      box1t: "Professional Image",
+      box1d: "Clean vehicles, refined service details and a stronger overall customer impression.",
+      box2t: "Punctual & Reliable",
+      box2d: "Airport transfers and business journeys need dependable time management.",
+      box3t: "Comfortable Experience",
+      box3d: "Premium vehicles, spacious seating and a more relaxed travel experience.",
+      box4t: "Flexible Arrangement",
+      box4d: "From solo trips to larger groups, suitable transport can be arranged quickly.",
+      imageTitle: "A transport service you can trust",
+      imageDesc: "From personal transfer to corporate team travel, we focus on punctual, professional and comfortable service for every journey.",
       profile: "Company Profile",
       profileText:
-        "Founded in 2023, Alpha Lux Transportation is committed to providing premium, comfortable and reliable ground transportation service. We focus on airport transfer, corporate travel, private tour charter, point-to-point transfer, wedding transport, luxury MPV charter, interstate transfer, long-term company shuttle and factory worker bus transport across Penang and Malaysia.",
+        "Alpha Lux Transportation is committed to providing premium, comfortable and reliable ground transport. We focus on airport transfer, corporate travel, private tour charter, point-to-point transport, wedding use, luxury MPV charter, interstate journeys, long-term shuttle arrangements and group bus service. Whether for individuals, families, business clients or larger groups, we aim to deliver a smoother and more professional travel experience for every trip.",
     },
     booking: {
       eyebrow: "Book Now",
       title: "Send your booking details directly via WhatsApp",
-      desc: "After filling in the form, the button will take the customer straight to WhatsApp with the booking details ready to send.",
+      desc: "After submitting the form, you will be redirected to WhatsApp with your travel details pre-filled for faster quotation and confirmation.",
       name: "Name",
       date: "Travel Date",
       pickup: "Pick Up",
       destination: "Destination",
       passengers: "Passengers",
-      vehicle: "Vehicle",
-      hours: "Hours / Trip Type",
+      vehicle: "Vehicle Preference",
+      hours: "Trip Type / Charter Hours",
       notes: "Notes",
-      submit: "Book via WhatsApp",
+      submit: "Send via WhatsApp",
       call: "Call Now",
-      direct: "Direct Contact",
+      direct: "Contact Details",
       location: "Location",
     },
     faq: {
       eyebrow: "FAQ",
-      title: "Frequently Asked Questions",
-      desc: "For faster quotation, contact us directly on WhatsApp.",
+      title: "Most common questions before booking",
+      desc: "For faster quotation, you may also contact us directly via WhatsApp.",
       list: [
-        ["What services do you provide?", "We provide airport transfer, corporate travel, private tour charter, point-to-point transfer, wedding transport, luxury MPV charter, interstate transfer, long-term company transport and factory worker bus service."],
-        ["What is your featured vehicle?", "Our featured vehicle is Alphard 40Z, ideal for premium airport transfer, VIP guests, business travel and weddings."],
-        ["How is the price calculated?", "Point-to-point service is quoted based on route. Hourly charter starts from a minimum of 4 hours. Longer or interstate trips can be customized."],
-        ["Can I book outstation or interstate trips?", "Yes. We provide private transport across Penang and Malaysia."],
-        ["How do I place an order?", "Fill in the booking form and click the button to send your details directly to us via WhatsApp."],
-      ] as const,
+        ["What services do you provide?", "We provide airport transfer, corporate travel, private tour charter, point-to-point transfer, wedding transport, luxury MPV charter, interstate transfer, long-term shuttle and group bus service."],
+        ["What is your featured vehicle?", "Our featured vehicle is Alphard 40Z, suitable for luxury airport transfer, VIP reception, business travel and wedding transport."],
+        ["How is the pricing calculated?", "Point-to-point service is quoted based on route. Charter trips are usually quoted based on hours, vehicle type and itinerary."],
+        ["Can I book trips outside Penang?", "Yes. We provide private charter and interstate transfer across Penang and Malaysia."],
+        ["How do I place an order?", "Fill in the form and click the button. The system will open WhatsApp with your details ready to send for confirmation."],
+      ] as const satisfies readonly FaqItem[],
       next: "Next Step",
-      nextTitle: "Ready to book?",
+      nextTitle: "Ready to book your trip?",
       nextBtn: "WhatsApp Alpha Lux",
     },
     footer: {
-      desc: "Premium airport transfer, corporate chauffeur, private charter and group transportation across Penang and Malaysia.",
+      desc: "Premium airport transfer, corporate travel, private charter and group transportation across Penang and Malaysia.",
       contact: "Contact",
       featured: "Featured Vehicle",
       featuredValue: "Alphard 40Z · VIP Luxury MPV",
@@ -328,9 +336,6 @@ const content = {
   },
 } as const;
 
-type FleetItem = readonly [string, string, string, string, string, string];
-type FaqItem = readonly [string, string];
-type ServiceItem = readonly [string, string, string];
 type LangContent = (typeof content)[Lang];
 
 function ButtonLink({ children, href, onClick, primary = false, external = false }: ButtonProps) {
@@ -340,13 +345,22 @@ function ButtonLink({ children, href, onClick, primary = false, external = false
 
   if (href) {
     return (
-      <a href={href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined} className={className}>
+      <a
+        href={href}
+        target={external ? "_blank" : undefined}
+        rel={external ? "noreferrer" : undefined}
+        className={className}
+      >
         {children}
       </a>
     );
   }
 
-  return <button onClick={onClick} className={className}>{children}</button>;
+  return (
+    <button onClick={onClick} className={className}>
+      {children}
+    </button>
+  );
 }
 
 function SectionTitle({ eyebrow, title, desc }: SectionTitleProps) {
@@ -359,10 +373,26 @@ function SectionTitle({ eyebrow, title, desc }: SectionTitleProps) {
   );
 }
 
-function PhotoCard({ src, alt, title, subtitle, tall = false }: { src: string; alt: string; title?: string; subtitle?: string; tall?: boolean }) {
+function PhotoCard({
+  src,
+  alt,
+  title,
+  subtitle,
+  tall = false,
+}: {
+  src: string;
+  alt: string;
+  title?: string;
+  subtitle?: string;
+  tall?: boolean;
+}) {
   return (
     <div className={`group relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#111216] ${tall ? "min-h-[340px]" : "min-h-[230px]"}`}>
-      <img src={src} alt={alt} className={`h-full w-full object-cover transition duration-500 group-hover:scale-[1.03] ${tall ? "min-h-[340px]" : "min-h-[230px]"}`} />
+      <img
+        src={src}
+        alt={alt}
+        className={`h-full w-full object-cover transition duration-500 group-hover:scale-[1.03] ${tall ? "min-h-[340px]" : "min-h-[230px]"}`}
+      />
       {(title || subtitle) && (
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-5">
           {title ? <div className="text-lg font-semibold">{title}</div> : null}
@@ -375,23 +405,16 @@ function PhotoCard({ src, alt, title, subtitle, tall = false }: { src: string; a
 
 function FloatingWhatsApp() {
   return (
-    <a href={company.whatsappLink} target="_blank" rel="noreferrer" className="fixed bottom-5 right-5 z-[60] inline-flex items-center gap-3 rounded-full border border-[#d4af67]/20 bg-[#111216] px-5 py-3 text-sm font-semibold text-white shadow-2xl transition hover:scale-[1.02]">
+    <a
+      href={company.whatsappLink}
+      target="_blank"
+      rel="noreferrer"
+      className="fixed bottom-5 right-5 z-[60] inline-flex items-center gap-3 rounded-full border border-[#d4af67]/20 bg-[#111216] px-5 py-3 text-sm font-semibold text-white shadow-2xl transition hover:scale-[1.02]"
+    >
       <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#d4af67] text-black">WA</span>
       <span className="hidden sm:inline">WhatsApp Us</span>
     </a>
   );
-}
-
-function getNavLabel(t: LangContent, key: PageKey) {
-  switch (key) {
-    case "home": return t.nav.home;
-    case "services": return t.nav.services;
-    case "fleet": return t.nav.fleet;
-    case "about": return t.nav.about;
-    case "booking": return t.nav.booking;
-    case "faq": return t.nav.faq;
-    default: return t.nav.home;
-  }
 }
 
 function HomePage({ lang, goTo }: { lang: Lang; goTo: (page: PageKey) => void }) {
@@ -413,12 +436,12 @@ function HomePage({ lang, goTo }: { lang: Lang; goTo: (page: PageKey) => void })
               <ButtonLink onClick={() => goTo("fleet")}>{t.hero.cta2}</ButtonLink>
               <ButtonLink href={company.mapLink} external>{t.hero.cta3}</ButtonLink>
             </div>
-            <div className="mt-6 flex flex-wrap gap-3 text-sm text-white/70">
-              <a href={company.instagram} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 transition hover:border-[#d4af67]/25">Instagram</a>
-              <a href={company.facebook} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 transition hover:border-[#d4af67]/25">Facebook</a>
-            </div>
             <div className="mt-10 grid gap-4 sm:grid-cols-3">
-              {[[t.hero.card1t, t.hero.card1d], [t.hero.card2t, t.hero.card2d], [t.hero.card3t, t.hero.card3d]].map(([title, text]) => (
+              {[
+                [t.hero.card1t, t.hero.card1d],
+                [t.hero.card2t, t.hero.card2d],
+                [t.hero.card3t, t.hero.card3d],
+              ].map(([title, text]) => (
                 <div key={title} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
                   <div className="text-2xl font-semibold text-[#d4af67]">{title}</div>
                   <div className="mt-2 text-sm text-white/62">{text}</div>
@@ -429,8 +452,8 @@ function HomePage({ lang, goTo }: { lang: Lang; goTo: (page: PageKey) => void })
           <div className="space-y-5">
             <PhotoCard src={images.hero} alt="Hero vehicle" title={t.hero.featureTitle} subtitle={t.hero.featureDesc} tall />
             <div className="grid gap-5 sm:grid-cols-2">
-              <PhotoCard src={images.home1} alt="Service photo 1" title={t.hero.photo1} subtitle={t.hero.photo1d} />
-              <PhotoCard src={images.home2} alt="Service photo 2" title={t.hero.photo2} subtitle={t.hero.photo2d} />
+              <PhotoCard src={images.home1} alt="Airport or hotel transfer" title={t.hero.photo1} subtitle={t.hero.photo1d} />
+              <PhotoCard src={images.home2} alt="Business or VIP travel" title={t.hero.photo2} subtitle={t.hero.photo2d} />
             </div>
           </div>
         </div>
@@ -439,9 +462,9 @@ function HomePage({ lang, goTo }: { lang: Lang; goTo: (page: PageKey) => void })
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <SectionTitle eyebrow={t.services.eyebrow} title={t.services.title} desc={t.services.desc} />
         <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {(t.services.list as readonly ServiceItem[]).map(([title, en, desc]) => (
+          {(t.services.list as readonly ServiceItem[]).map(([title, subtitle, desc]) => (
             <div key={title} className="rounded-[1.75rem] border border-white/10 bg-white/5 p-6">
-              <div className="text-xs uppercase tracking-[0.25em] text-[#d4af67]">{en}</div>
+              <div className="text-xs uppercase tracking-[0.25em] text-[#d4af67]">{subtitle}</div>
               <h3 className="mt-3 text-xl font-semibold">{title}</h3>
               <p className="mt-3 text-sm leading-7 text-white/62">{desc}</p>
             </div>
@@ -484,20 +507,24 @@ function ServicesPage({ lang }: { lang: Lang }) {
     <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
       <SectionTitle eyebrow={t.services.eyebrow} title={t.services.title} desc={t.services.desc} />
       <div className="mt-10 grid gap-6 lg:grid-cols-2">
-        {(t.services.list as readonly ServiceItem[]).map(([title, en, desc]) => (
+        {(t.services.list as readonly ServiceItem[]).map(([title, subtitle, desc]) => (
           <div key={title} className="rounded-[2rem] border border-white/10 bg-white/5 p-7">
-            <div className="text-xs uppercase tracking-[0.24em] text-[#d4af67]">{en}</div>
+            <div className="text-xs uppercase tracking-[0.24em] text-[#d4af67]">{subtitle}</div>
             <h3 className="mt-2 text-2xl font-semibold">{title}</h3>
             <p className="mt-3 text-sm leading-8 text-white/65">{desc}</p>
           </div>
         ))}
       </div>
       <div className="mt-12 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-        <PhotoCard src={images.contact} alt="Service banner" title={t.hero.photo1} subtitle={t.hero.photo1d} tall />
+        <PhotoCard src={images.contact} alt="Service banner" title={t.services.bannerTitle} subtitle={t.services.bannerDesc} tall />
         <div className="rounded-[2rem] border border-white/10 bg-[#111216] p-7">
           <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">{t.services.bestFor}</div>
           <div className="mt-4 grid gap-4">
-            {[[t.services.bf1t, t.services.bf1d], [t.services.bf2t, t.services.bf2d], [t.services.bf3t, t.services.bf3d]].map(([title, text]) => (
+            {[
+              [t.services.bf1t, t.services.bf1d],
+              [t.services.bf2t, t.services.bf2d],
+              [t.services.bf3t, t.services.bf3d],
+            ].map(([title, text]) => (
               <div key={title} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
                 <div className="font-medium">{title}</div>
                 <p className="mt-2 text-sm leading-7 text-white/62">{text}</p>
@@ -537,9 +564,9 @@ function FleetPage({ lang }: { lang: Lang }) {
         ))}
       </div>
       <div className="mt-12 grid gap-5 md:grid-cols-3">
-        <PhotoCard src={images.luxury2} alt="Gallery 1" title={t.fleet.gallery1} subtitle={t.fleet.gallery1d} />
-        <PhotoCard src={images.interior1} alt="Gallery 2" title={t.fleet.gallery2} subtitle={t.fleet.gallery2d} />
-        <PhotoCard src={images.busInterior} alt="Gallery 3" title={t.fleet.gallery3} subtitle={t.fleet.gallery3d} />
+        <PhotoCard src={images.luxury2} alt="Luxury cabin" title={t.fleet.gallery1} subtitle={t.fleet.gallery1d} />
+        <PhotoCard src={images.interior1} alt="Interior space" title={t.fleet.gallery2} subtitle={t.fleet.gallery2d} />
+        <PhotoCard src={images.busInterior} alt="Bus interior" title={t.fleet.gallery3} subtitle={t.fleet.gallery3d} />
       </div>
     </div>
   );
@@ -553,7 +580,12 @@ function AboutPage({ lang }: { lang: Lang }) {
         <div>
           <SectionTitle eyebrow={t.about.eyebrow} title={t.about.title} desc={t.about.desc} />
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            {[[t.about.box1t, t.about.box1d], [t.about.box2t, t.about.box2d], [t.about.box3t, t.about.box3d], [t.about.box4t, t.about.box4d]].map(([title, text]) => (
+            {[
+              [t.about.box1t, t.about.box1d],
+              [t.about.box2t, t.about.box2d],
+              [t.about.box3t, t.about.box3d],
+              [t.about.box4t, t.about.box4d],
+            ].map(([title, text]) => (
               <div key={title} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
                 <div className="text-lg font-semibold">{title}</div>
                 <p className="mt-2 text-sm leading-7 text-white/63">{text}</p>
@@ -561,7 +593,7 @@ function AboutPage({ lang }: { lang: Lang }) {
             ))}
           </div>
         </div>
-        <PhotoCard src={images.about} alt="About image" title={t.about.imageTitle} subtitle={t.about.imageDesc} tall />
+        <PhotoCard src={images.about} alt="About Alpha Lux" title={t.about.imageTitle} subtitle={t.about.imageDesc} tall />
       </div>
       <div className="mt-12 rounded-[2rem] border border-white/10 bg-[#111216] p-8">
         <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">{t.about.profile}</div>
@@ -583,10 +615,18 @@ function BookingPage({ lang }: { lang: Lang }) {
   const [notes, setNotes] = useState("");
 
   const bookingMessage = useMemo(() => {
-    return `Hello Alpha Lux Transportation,%0A%0AI want to book a transport service.%0A%0AName: ${encodeURIComponent(name)}%0ADate: ${encodeURIComponent(date)}%0APick Up: ${encodeURIComponent(pickup)}%0ADestination: ${encodeURIComponent(destination)}%0APassengers: ${encodeURIComponent(passengers)}%0AVehicle: ${encodeURIComponent(vehicle)}%0AHours / Trip Type: ${encodeURIComponent(hours)}%0AAdditional Notes: ${encodeURIComponent(notes)}`;
+    return `Hello Alpha Lux Transportation,%0A%0AI want to book a transport service.%0A%0AName: ${encodeURIComponent(name)}%0ADate: ${encodeURIComponent(date)}%0APick Up: ${encodeURIComponent(pickup)}%0ADestination: ${encodeURIComponent(destination)}%0APassengers: ${encodeURIComponent(passengers)}%0AVehicle: ${encodeURIComponent(vehicle)}%0ATrip Type / Hours: ${encodeURIComponent(hours)}%0AAdditional Notes: ${encodeURIComponent(notes)}`;
   }, [name, date, pickup, destination, passengers, vehicle, hours, notes]);
 
   const submitLink = `${company.whatsappLink}?text=${bookingMessage}`;
+
+  const contactRows = [
+    ["WhatsApp", company.whatsapp, company.whatsappLink, true],
+    ["Phone", company.phone, company.phoneLink, false],
+    ["Email", company.email, company.emailLink, false],
+    ["Instagram", "@alphalux.tt", company.instagram, true],
+    ["Facebook", "Alpha Lux Tours and Transportation", company.facebook, true],
+  ] as const;
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
@@ -594,32 +634,67 @@ function BookingPage({ lang }: { lang: Lang }) {
       <div className="mt-10 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="rounded-[2rem] border border-white/10 bg-white/5 p-7">
           <div className="grid gap-5 sm:grid-cols-2">
-            <div><div className="mb-2 text-sm text-white/75">{t.booking.name}</div><input value={name} onChange={(e) => setName(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="Your name" /></div>
-            <div><div className="mb-2 text-sm text-white/75">{t.booking.date}</div><input value={date} onChange={(e) => setDate(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="12 Apr 2026" /></div>
-            <div><div className="mb-2 text-sm text-white/75">{t.booking.pickup}</div><input value={pickup} onChange={(e) => setPickup(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="Penang Airport" /></div>
-            <div><div className="mb-2 text-sm text-white/75">{t.booking.destination}</div><input value={destination} onChange={(e) => setDestination(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="Gurney / KL / Ipoh" /></div>
-            <div><div className="mb-2 text-sm text-white/75">{t.booking.passengers}</div><input value={passengers} onChange={(e) => setPassengers(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="2 / 4 / 10 / 30 pax" /></div>
-            <div><div className="mb-2 text-sm text-white/75">{t.booking.vehicle}</div><select value={vehicle} onChange={(e) => setVehicle(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none"><option>Alphard 40Z</option><option>Vellfire</option><option>Serena / Voxy / Nova</option><option>5 Seater Sedan / SUV</option><option>Van 10–18 Seater</option><option>Bus 24–44 Seater</option></select></div>
+            <div>
+              <div className="mb-2 text-sm text-white/75">{t.booking.name}</div>
+              <input value={name} onChange={(e) => setName(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder={lang === "zh" ? "请输入姓名" : "Your name"} />
+            </div>
+            <div>
+              <div className="mb-2 text-sm text-white/75">{t.booking.date}</div>
+              <input value={date} onChange={(e) => setDate(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="12 Apr 2026" />
+            </div>
+            <div>
+              <div className="mb-2 text-sm text-white/75">{t.booking.pickup}</div>
+              <input value={pickup} onChange={(e) => setPickup(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder={lang === "zh" ? "例如：Penang Airport" : "Example: Penang Airport"} />
+            </div>
+            <div>
+              <div className="mb-2 text-sm text-white/75">{t.booking.destination}</div>
+              <input value={destination} onChange={(e) => setDestination(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder={lang === "zh" ? "例如：Gurney / KL / Ipoh" : "Example: Gurney / KL / Ipoh"} />
+            </div>
+            <div>
+              <div className="mb-2 text-sm text-white/75">{t.booking.passengers}</div>
+              <input value={passengers} onChange={(e) => setPassengers(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder={lang === "zh" ? "例如：2 / 4 / 10 / 30 pax" : "Example: 2 / 4 / 10 / 30 pax"} />
+            </div>
+            <div>
+              <div className="mb-2 text-sm text-white/75">{t.booking.vehicle}</div>
+              <select value={vehicle} onChange={(e) => setVehicle(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none">
+                <option>Alphard 40Z</option>
+                <option>Vellfire</option>
+                <option>Serena / Voxy / Nova</option>
+                <option>5 Seater Sedan / SUV</option>
+                <option>Van 10–18 Seater</option>
+                <option>Bus 24–44 Seater</option>
+              </select>
+            </div>
           </div>
-          <div className="mt-5"><div className="mb-2 text-sm text-white/75">{t.booking.hours}</div><input value={hours} onChange={(e) => setHours(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="Point to Point / 4 Hours / Full Day / Interstate" /></div>
-          <div className="mt-5"><div className="mb-2 text-sm text-white/75">{t.booking.notes}</div><textarea value={notes} onChange={(e) => setNotes(e.target.value)} className="min-h-[140px] w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder="Child seat / Multiple stops / Return trip / Extra luggage / VIP request" /></div>
-          <div className="mt-6 flex flex-wrap gap-3"><ButtonLink primary href={submitLink} external>{t.booking.submit}</ButtonLink><ButtonLink href={company.phoneLink}>{t.booking.call}</ButtonLink></div>
+          <div className="mt-5">
+            <div className="mb-2 text-sm text-white/75">{t.booking.hours}</div>
+            <input value={hours} onChange={(e) => setHours(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder={lang === "zh" ? "例如：Point to Point / 4 Hours / Full Day / Interstate" : "Example: Point to Point / 4 Hours / Full Day / Interstate"} />
+          </div>
+          <div className="mt-5">
+            <div className="mb-2 text-sm text-white/75">{t.booking.notes}</div>
+            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} className="min-h-[140px] w-full rounded-2xl border border-white/10 bg-[#111216] px-4 py-4 text-sm text-white outline-none" placeholder={lang === "zh" ? "例如：儿童座椅、多站点、往返、额外行李、VIP 要求" : "Example: Child seat, multiple stops, return trip, extra luggage, VIP request"} />
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <ButtonLink primary href={submitLink} external>{t.booking.submit}</ButtonLink>
+            <ButtonLink href={company.phoneLink}>{t.booking.call}</ButtonLink>
+          </div>
         </div>
         <div className="space-y-6">
           <div className="rounded-[2rem] border border-white/10 bg-[#111216] p-7">
             <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">{t.booking.direct}</div>
             <div className="mt-5 space-y-4">
-              {(
-                [
-                  ["WhatsApp", company.whatsapp, company.whatsappLink, true],
-                  ["Phone", company.phone, company.phoneLink, false],
-                  ["Email", company.email, company.emailLink, false],
-                  ["Instagram", "@alphalux.tt", company.instagram, true],
-                  ["Facebook", "Alpha Lux Tours and Transportation", company.facebook, true],
-                ] as const
-              ).map(([title, text, href, external]) => (
-                <a key={String(title)} href={href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined} className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-[#d4af67]/25">
-                  <div><div className="font-medium">{title}</div><div className="mt-1 text-sm text-white/60">{text}</div></div>
+              {contactRows.map(([title, text, href, external]) => (
+                <a
+                  key={String(title)}
+                  href={href}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noreferrer" : undefined}
+                  className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-[#d4af67]/25"
+                >
+                  <div>
+                    <div className="font-medium">{title}</div>
+                    <div className="mt-1 text-sm text-white/60">{text}</div>
+                  </div>
                   <div className="text-white/30">↗</div>
                 </a>
               ))}
@@ -629,7 +704,9 @@ function BookingPage({ lang }: { lang: Lang }) {
             <div className="border-b border-white/10 p-7">
               <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">{t.booking.location}</div>
               <div className="mt-3 text-sm leading-7 text-white/72">{company.address}</div>
-              <div className="mt-4"><ButtonLink href={company.mapLink} external>Open in Google Maps</ButtonLink></div>
+              <div className="mt-4">
+                <ButtonLink href={company.mapLink} external>{lang === "zh" ? "打开 Google Maps" : "Open in Google Maps"}</ButtonLink>
+              </div>
             </div>
             <iframe title="Alpha Lux Transportation Location" src="https://www.google.com/maps?q=3A-G-35%20Straits%20Quay%20Marina%20Mall%20Tanjung%20Tokong%20Penang&output=embed" className="h-[280px] w-full border-0" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
           </div>
@@ -645,20 +722,41 @@ function FaqPage({ lang }: { lang: Lang }) {
     <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
       <SectionTitle eyebrow={t.faq.eyebrow} title={t.faq.title} desc={t.faq.desc} />
       <div className="mt-10 grid gap-5">
-        {(t.faq.list as readonly FaqItem[]).map(([q, a]) => (
-          <div key={q} className="rounded-[1.75rem] border border-white/10 bg-white/5 p-6">
-            <h3 className="text-lg font-semibold">{q}</h3>
-            <p className="mt-3 text-sm leading-8 text-white/64">{a}</p>
+        {(t.faq.list as readonly FaqItem[]).map(([question, answer]) => (
+          <div key={question} className="rounded-[1.75rem] border border-white/10 bg-white/5 p-6">
+            <h3 className="text-lg font-semibold">{question}</h3>
+            <p className="mt-3 text-sm leading-8 text-white/64">{answer}</p>
           </div>
         ))}
       </div>
       <div className="mt-12 rounded-[2rem] border border-white/10 bg-[#111216] p-8">
         <div className="text-sm uppercase tracking-[0.32em] text-[#d4af67]">{t.faq.next}</div>
         <h3 className="mt-3 text-2xl font-semibold">{t.faq.nextTitle}</h3>
-        <div className="mt-6"><ButtonLink primary href={company.whatsappLink} external>{t.faq.nextBtn}</ButtonLink></div>
+        <div className="mt-6">
+          <ButtonLink primary href={company.whatsappLink} external>{t.faq.nextBtn}</ButtonLink>
+        </div>
       </div>
     </div>
   );
+}
+
+function getNavLabel(t: LangContent, key: PageKey) {
+  switch (key) {
+    case "home":
+      return t.nav.home;
+    case "services":
+      return t.nav.services;
+    case "fleet":
+      return t.nav.fleet;
+    case "about":
+      return t.nav.about;
+    case "booking":
+      return t.nav.booking;
+    case "faq":
+      return t.nav.faq;
+    default:
+      return t.nav.home;
+  }
 }
 
 export default function Page() {
@@ -669,7 +767,9 @@ export default function Page() {
 
   useEffect(() => {
     const hash = window.location.hash.replace("#", "") as PageKey;
-    if (["home", "services", "fleet", "about", "booking", "faq"].includes(hash)) setCurrentPage(hash);
+    if (["home", "services", "fleet", "about", "booking", "faq"].includes(hash)) {
+      setCurrentPage(hash);
+    }
   }, []);
 
   useEffect(() => {
@@ -680,18 +780,25 @@ export default function Page() {
 
   const renderPage = () => {
     switch (currentPage) {
-      case "services": return <ServicesPage lang={lang} />;
-      case "fleet": return <FleetPage lang={lang} />;
-      case "about": return <AboutPage lang={lang} />;
-      case "booking": return <BookingPage lang={lang} />;
-      case "faq": return <FaqPage lang={lang} />;
-      default: return <HomePage lang={lang} goTo={setCurrentPage} />;
+      case "services":
+        return <ServicesPage lang={lang} />;
+      case "fleet":
+        return <FleetPage lang={lang} />;
+      case "about":
+        return <AboutPage lang={lang} />;
+      case "booking":
+        return <BookingPage lang={lang} />;
+      case "faq":
+        return <FaqPage lang={lang} />;
+      default:
+        return <HomePage lang={lang} goTo={setCurrentPage} />;
     }
   };
 
   return (
     <div className="min-h-screen bg-[#0b0b0d] text-white">
       <FloatingWhatsApp />
+
       <div className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
           <button onClick={() => setCurrentPage("home")} className="flex items-center gap-3 text-left">
@@ -704,7 +811,11 @@ export default function Page() {
 
           <div className="hidden items-center gap-7 md:flex">
             {pages.map((page) => (
-              <button key={page.key} onClick={() => setCurrentPage(page.key)} className={`text-sm transition ${currentPage === page.key ? "text-[#d4af67]" : "text-white/70 hover:text-white"}`}>
+              <button
+                key={page.key}
+                onClick={() => setCurrentPage(page.key)}
+                className={`text-sm transition ${currentPage === page.key ? "text-[#d4af67]" : "text-white/70 hover:text-white"}`}
+              >
                 {getNavLabel(t, page.key)}
               </button>
             ))}
@@ -727,7 +838,11 @@ export default function Page() {
             </div>
             <div className="grid gap-3">
               {pages.map((page) => (
-                <button key={page.key} onClick={() => setCurrentPage(page.key)} className={`rounded-2xl px-4 py-3 text-left text-sm ${currentPage === page.key ? "bg-[#d4af67]/12 text-[#d4af67]" : "bg-white/5 text-white/75"}`}>
+                <button
+                  key={page.key}
+                  onClick={() => setCurrentPage(page.key)}
+                  className={`rounded-2xl px-4 py-3 text-left text-sm ${currentPage === page.key ? "bg-[#d4af67]/12 text-[#d4af67]" : "bg-white/5 text-white/75"}`}
+                >
                   {getNavLabel(t, page.key)}
                 </button>
               ))}
@@ -749,10 +864,12 @@ export default function Page() {
               </div>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-white/60">{t.footer.desc}</p>
             </div>
+
             <div className="text-sm text-white/60">
               <div>{t.footer.contact}</div>
               <div className="mt-2 font-medium text-white">{company.phone}</div>
             </div>
+
             <div className="text-sm text-white/60">
               <div>{t.footer.featured}</div>
               <div className="mt-2 font-medium text-white">{t.footer.featuredValue}</div>
